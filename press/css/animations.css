@@ -1,0 +1,54 @@
+/* Animations */
+
+.logo,
+.about,
+.headlinks li,
+nav.archive.header{
+  opacity: 0;
+  -webkit-transform: translateY(-20px);
+  -moz-transform: translateY(-20px);
+  transform: translateY(-20px);
+  -webkit-animation: fadein .6s .5s 1 forwards ease-in-out;
+  -moz-animation: fadein .6s .5s 1 forwards ease-in-out;
+  animation: fadein .6s .5s 1 forwards ease-in-out;
+}
+.about{
+  -webkit-animation-delay: .8s;
+  -moz-animation-delay: .8s;
+  animation-delay: .8s;
+}
+.headlinks li.twitter{
+  -webkit-animation-delay: 1.1s;
+  -moz-animation-delay: 1.1s;
+  animation-delay: 1.1s;
+}
+.headlinks li.github{
+  -webkit-animation-delay: 1.3s;
+  -moz-animation-delay: 1.3s;
+  animation-delay: 1.3s;
+}
+.headlinks li.weibo{
+  -webkit-animation-delay: 1.5s;
+  -moz-animation-delay: 1.5s;
+  animation-delay: 1.5s;
+}
+@-webkit-keyframes fadein{
+  0%{
+    -webkit-transform: translateY(-20px);
+    opacity: 0;
+  }
+  100%{
+    -webkit-transform: translateY(0);
+    opacity: .8;
+  }
+}
+@-moz-keyframes fadein{
+  0%{
+    -moz-transform: translateY(-20px);
+    opacity: 0;
+  }
+  100%{
+    -moz-transform: translateY(0);
+    opacity: .8;
+  }
+}

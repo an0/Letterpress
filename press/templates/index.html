@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>I'm Wang Ling. I'm wangling you.</title>
+		
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="robots" content="index, follow">
+  <meta name="description" content="Ling Wang's blog." />
+  <meta name="keywords" content="Moke, Voodo, iOS, iPhone, iPad, app, OS X, Mac, Apple" />
+  <meta name="author" content="Ling Wang" />
+
+	<link rel="shortcut icon" href="/favicon.png" />
+	<link rel="alternate" type="application/rss+xml" title="RSS" href="/feed" />
+	
+	<link rel="stylesheet" href="/css/default.css" />
+	<link rel="stylesheet" href="/css/animations.css" />
+</head>
+<body>
+  <header role="banner">
+    <div class="container">
+      <a href="/" class="logo"><img src="/img/logo@2x.png" alt="Logo" /></a>
+      <h1 class="about">
+        I am Ling Wang, an independent iOS developer living in US, originally from China. I make <a href="http://moke.com">Moke</a> and <a href="http://iwonderphone.com">Voodo</a>.
+      </h1>
+      <ul class="headlinks">
+        <li class="twitter">
+          <a href="http://twitter.com/an0"><img src="/img/twitter.png" alt="Twitter" /></a>
+        </li>
+				<li class="github">
+				  <a href="http://github.com/an0"><img src="/img/github.png" alt="GitHub" /></a>
+				</li>
+        <li class="weibo">
+          <a href="http://weibo.com/an00na"><img src="/img/weibo.png" alt="微博" /></a>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <section role="main" class="container">
+		{{#posts}}
+	  <article>
+	    <time datetime="{{date}}">{{pretty_date}}</time>
+	    <header>
+	      <h2><a href="{{permalink}}">{{title}}</a></h2>
+	    </header>
+	    <section class="content">
+	      <p class="intro">{{excerpt}}</p>
+	    </section>
+	  </article>
+	  {{/posts}}
+  </section>
+  
+	<nav class="archive footer container">
+		<a class="nav-prev" href="{{prev_archive_url}}"><h1>{{prev_archive_title}}</h1></a>
+		<a class="nav-next" href="{{next_archive_url}}"><h1>{{next_archive_title}}</h1></a>
+	</nav>
+	
+  <footer id="footer">
+    <section class="container">
+      <p>Powered by <a href="https://github.com/an0/Letterpress">Letterpress</a>.</p>
+    </section>
+  </footer>
+</body>
+</html>

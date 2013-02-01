@@ -1,0 +1,522 @@
+/*
+
+Handwritten by Michiel de Graaf.
+
+*/
+
+@import url(http://fonts.googleapis.com/css?family=PT+Serif:400,700,400italic,700italic);
+@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic,700italic);
+@import url(http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700);
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, dialog{
+  display: block;
+}
+*{
+  margin: 0;
+  padding: 0;
+}
+
+/* Basics
+ *************************************/
+
+body{
+  font-family: "PT Serif", Georgia, Times, "Times New Roman", "Songti SC", serif;
+  font-size: 100%;
+  line-height: 200%;
+  vertical-align: baseline;
+  color: #18191a;
+  background: #fff;
+  -webkit-font-smoothing: antialiased;
+}
+a{
+  cursor: pointer;
+  color: #000;
+  text-decoration: none;
+  transition: all .25s;
+}
+article a{
+  border-bottom: 1px solid rgba(0,0,0,.5);
+}
+article a:hover{
+  border-color: rgba(0,0,0,0);
+  background: #fff4cc;
+}
+h1,h2,h3,h4{
+  font-family: "Source Sans Pro", Futura, "Helvetica Neue", Helvetica, "Lantinghei SC", "Kaiti SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+}
+h1 a,h2 a,h3 a,h4 a{
+	border: none;
+}
+code{
+  font-family: Menlo, Monaco, Consolas, "Source Code Pro", monospace;
+}
+.container{
+  overflow: hidden;
+  width: 720px;
+  margin: 0 auto;
+}
+
+/* Header
+ *************************************/
+
+header[role="banner"]{
+  overflow: hidden;
+  padding: 40px 0 50px 0;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+.logo{
+  display: inline-block;
+  width: 37px;
+  height: 34px;
+  margin-top: 20px;
+  border: 0 none;
+  background: url(/img/logo.png) no-repeat center center;
+}
+.logo img{
+  display: none;
+}
+.about{
+  margin-top: 20px;
+  font-size: 1.125em;
+  font-weight: normal;
+  line-height: 1.4em;
+  color: #000;
+  text-align: center;
+  text-shadow: 0 1px rgba(255,255,255,.4);
+}
+.about span{
+  font-style: italic;
+}
+.headlinks{
+  list-style: none;
+  overflow: hidden;
+}
+.headlinks li{
+  display: inline-block;
+  margin: 20px 5px 0 5px;
+}
+.headlinks a{
+  display: block;
+  color: #000;
+  text-shadow: 0 1px rgba(255,255,255,.4);
+  border: 0 none;
+  opacity: .5;
+}
+.headlinks a:hover{
+  opacity: 1;
+}
+.headlinks a img{
+  width: 16px;
+  height: 16px;
+}
+.headlinks a span{
+  display: none;
+}
+header[role="banner"]#post-head{
+  padding: 10px 0 30px 0;
+}
+#post-head .logo{
+  display: block;
+  float: left;
+}
+
+/* Nav
+ *************************************/
+nav.archive.header{
+	margin-top: 20px;
+}
+nav.archive.footer{
+	margin-top: -40px;
+	margin-bottom: 30px;
+}
+nav.archive h1{
+	font-size: 2.0em;
+	line-height: 1.2em;
+}
+nav.archive .nav-prev{
+	float: left;
+}
+nav.archive .nav-next{
+	float: right;
+}
+nav.archive .archive-title{
+	text-align: center;
+	margin-left: 20px;
+	margin-right: 20px;
+}
+
+/* Articles
+ *************************************/
+
+section[role="main"]{
+  overflow: hidden;
+  padding-top: 20px;
+  padding-bottom: 80px;
+}
+section.archive{
+	margin-top: 80px;
+}
+section.archive h1{
+	font-size: 2.0em;
+	line-height: 1.2em;
+}
+section.archive .archive-title{
+	text-align: center;
+}
+article{
+  margin-top: 60px;
+}
+article header{
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+article header h1{
+  font-size: 2.4em;
+  line-height: 1.6em;
+}
+article time{
+  display: block;
+  margin-bottom: 8px;
+  color: #a4abb2;
+  font-family: "Open Sans", Futura, "Helvetica Neue", Helvetica, "Lantinghei SC", "Kaiti SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  font-size: .75em;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .2em;
+}
+article time a{
+  color: #a4abb2;
+  border-bottom: none;
+}
+article .content{
+  font-size: 1.25em;
+}
+article .content h2,
+article .content h3{
+  margin: 30px 0;
+}
+article .content h2{
+  font-size: 1.4em;
+}
+article .content h3{
+  font-size: 1.2em;
+}
+article .content p{
+  margin-bottom: 20px;
+}
+article .content img,
+article .content video{
+  display: block;
+/*  min-width: 50%;*/
+  max-width: 100%;
+  height: auto;
+  margin: auto;
+  padding: 10px 0;
+}
+article .content img.inline{
+	display: inline;
+}
+article .content ul,
+article .content ol{
+  margin: 0 0 20px 40px;
+}
+article .content p code{
+  font-size: .85em;
+	overflow-wrap: break-word;
+	word-wrap: break-word;;
+}
+article .content .intro{
+  margin-top: 0;
+}
+article .content .prettyprint{
+  display: block;
+  margin-bottom: 20px;
+  padding: 12px 18px;
+  line-height: 1.3em;
+  color: #f5f9ff;
+  text-shadow: 0 1px 1px rgba(0,0,0,.2);
+  background: #30353d;
+  border-radius: 3px;
+  box-shadow: 0 -1px 2px rgba(0,0,0,.8) inset;
+}
+article .content blockquote{
+	  font-family: "PT Serif", Georgia, Times, "Times New Roman", "STFangsong", serif;
+	  padding-left: 10px;
+	  border-left: 2px solid #ccc;
+}
+
+/*
+ * A better looking default horizontal rule
+ */
+hr {
+	height: 1px;
+	border: 0;
+	border-top: 1px solid #ccc;
+	margin: 1em 0;
+	padding: 0;
+}
+.footnotes hr {
+	margin: 3em auto 1em 0;
+	width: 8em;
+}
+
+/* Disqus
+ *************************************/
+#disqus_thread{
+	width: 720px;
+	margin: 0 auto;
+}
+
+/* Article footer
+ *************************************/
+.post-foot{
+  margin-top: 40px;
+  line-height: 130%;
+}
+.post-foot-top{
+  overflow: hidden;
+  padding: 20px 0;
+  text-align: right;
+  line-height: 120%;
+  border-bottom: 1px solid #ddd;
+}
+a.link-home{
+  display: block;
+  float: left;
+	border-bottom: none;
+}
+a.link-home:hover{
+  background: none;
+}
+a.link-home img{
+	width: 20px;
+	height: 20px;	
+}
+.bio{
+  margin-top: 60px;
+  line-height: 165%
+}
+.bio h5{
+  margin: 0 0 10px 160px;
+  font-size: 1.125em;
+  font-style: italic;
+}
+.bio p{
+  margin-left: 160px;
+  font-size: 1.125em;
+}
+.bio p span{
+  font-style: italic
+}
+.bio ul{
+  overflow: hidden;
+  margin: 10px 0 0 160px;
+  font-size: 1.125em;
+}
+.bio ul li{
+  display: block;
+  float: left;
+  margin-right: 15px;
+}
+.bio a i{
+  display: inline-block;
+  margin-right: 5px;
+  font-size: 60%;
+}
+.bio img{
+  display: block;
+  float: left;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+}
+
+/* Footer
+ *************************************/
+
+footer#footer{
+  padding: 50px 0;
+  border-top: 1px solid #ddd;
+}
+footer#footer p{
+  display: block;
+  font-size: 1em;
+  text-align: center;
+  color: #666;
+}
+footer#footer p a{
+  padding-bottom: 2px;
+}
+
+/* Code
+ *************************************/
+div.code {
+	margin-bottom: 20px;
+	padding: 10px;
+	overflow: auto;
+	border-radius: 4px;
+	border: 1px solid hsl(0,0%,84%);
+	box-shadow: 0 1px 1px hsla(0,0%,0%,.05),;
+	background-color: hsla(0,0%,0%,.02);
+ }
+code .hll { background-color: #ffffcc }
+code  { color: #586e75 }
+code .code-c { color: #93a1a1; font-style: italic } /* Comment */
+code .code-g { color: #d33682 } /* Generic */
+code .code-k { color: #859900 } /* Keyword */
+code .code-l { color: #2aa198 } /* Literal */
+code .code-n { color: #268bd2 } /* Name */
+code .code-cm { color: #93a1a1; font-style: italic } /* Comment.Multiline */
+code .code-cp { color: #93a1a1; font-style: italic } /* Comment.Preproc */
+code .code-c1 { color: #93a1a1; font-style: italic } /* Comment.Single */
+code .code-cs { color: #93a1a1; font-style: italic } /* Comment.Special */
+code .code-gd { color: #d33682 } /* Generic.Deleted */
+code .code-ge { color: #d33682 } /* Generic.Emph */
+code .code-gr { color: #d33682 } /* Generic.Error */
+code .code-gh { color: #d33682 } /* Generic.Heading */
+code .code-gi { color: #d33682 } /* Generic.Inserted */
+code .code-go { color: #d33682 } /* Generic.Output */
+code .code-gp { color: #d33682 } /* Generic.Prompt */
+code .code-gs { color: #d33682 } /* Generic.Strong */
+code .code-gu { color: #d33682 } /* Generic.Subheading */
+code .code-gt { color: #d33682 } /* Generic.Traceback */
+code .code-kc { color: #859900; font-weight: bold } /* Keyword.Constant */
+code .code-kd { color: #859900 } /* Keyword.Declaration */
+code .code-kn { color: #dc322f; font-weight: bold } /* Keyword.Namespace */
+code .code-kp { color: #859900 } /* Keyword.Pseudo */
+code .code-kr { color: #859900 } /* Keyword.Reserved */
+code .code-kt { color: #859900; font-weight: bold } /* Keyword.Type */
+code .code-ld { color: #2aa198 } /* Literal.Date */
+code .code-m { color: #2aa198; font-weight: bold } /* Literal.Number */
+code .code-s { color: #2aa198 } /* Literal.String */
+code .code-na { color: #268bd2 } /* Name.Attribute */
+code .code-nb { color: #cb4b16 } /* Name.Builtin */
+code .code-nc { color: #cb4b16 } /* Name.Class */
+code .code-no { color: #268bd2 } /* Name.Constant */
+code .code-nd { color: #268bd2 } /* Name.Decorator */
+code .code-ni { color: #268bd2 } /* Name.Entity */
+code .code-ne { color: #268bd2 } /* Name.Exception */
+code .code-nf { color: #268bd2 } /* Name.Function */
+code .code-nl { color: #268bd2 } /* Name.Label */
+code .code-nn { color: #268bd2 } /* Name.Namespace */
+code .code-nx { color: #268bd2 } /* Name.Other */
+code .code-py { color: #268bd2 } /* Name.Property */
+code .code-nt { color: #268bd2; font-weight: bold } /* Name.Tag */
+code .code-nv { color: #268bd2 } /* Name.Variable */
+code .code-ow { color: #859900 } /* Operator.Word */
+code .code-w { color: #586e75 } /* Text.Whitespace */
+code .code-mf { color: #2aa198; font-weight: bold } /* Literal.Number.Float */
+code .code-mh { color: #2aa198; font-weight: bold } /* Literal.Number.Hex */
+code .code-mi { color: #2aa198; font-weight: bold } /* Literal.Number.Integer */
+code .code-mo { color: #2aa198; font-weight: bold } /* Literal.Number.Oct */
+code .code-sb { color: #2aa198 } /* Literal.String.Backtick */
+code .code-sc { color: #2aa198 } /* Literal.String.Char */
+code .code-sd { color: #2aa198 } /* Literal.String.Doc */
+code .code-s2 { color: #2aa198 } /* Literal.String.Double */
+code .code-se { color: #2aa198 } /* Literal.String.Escape */
+code .code-sh { color: #2aa198 } /* Literal.String.Heredoc */
+code .code-si { color: #2aa198 } /* Literal.String.Interpol */
+code .code-sx { color: #2aa198 } /* Literal.String.Other */
+code .code-sr { color: #2aa198 } /* Literal.String.Regex */
+code .code-s1 { color: #2aa198 } /* Literal.String.Single */
+code .code-ss { color: #2aa198 } /* Literal.String.Symbol */
+code .code-bp { color: #cb4b16 } /* Name.Builtin.Pseudo */
+code .code-vc { color: #268bd2 } /* Name.Variable.Class */
+code .code-vg { color: #268bd2 } /* Name.Variable.Global */
+code .code-vi { color: #268bd2 } /* Name.Variable.Instance */
+code .code-il { color: #2aa198; font-weight: bold } /* Literal.Number.Integer.Long */
+
+/* Responsiveness
+ *************************************/
+
+@media screen and (max-width: 760px){
+  body{
+    font-size: 90%;
+  }
+  .container{
+    width: auto;
+    padding: 0 20px;
+  }
+  #disqus_thread{
+		width: auto;
+		padding: 0 20px;
+  }
+}
+@media screen and (max-width: 480px){
+  body{
+    font-size: 80%;
+  }
+  header[role="banner"]{
+    padding: 10px 0 20px 0;
+  }
+  header[role="banner"]#post-head{
+    padding: 0 0 20px 0;
+  }
+  .about{
+    margin-top: 15px;
+  }
+  nav.archive.header{
+  	margin-top: 15px;
+  }
+  nav.archive.footer{
+  	margin-top: -40px;
+  	margin-bottom: 20px;
+  }
+  nav.archive h1{
+  	font-size: 1.8em;
+  }
+  section[role="main"]{
+    padding-bottom: 50px;
+  }
+	section.archive{
+		margin-top: 30px;
+	}
+	section.archive h1{
+		font-size: 1.8em;
+	}
+	article{
+    margin-top: 20px;
+  }
+  article header h1{
+    font-size: 1.9em;
+  }
+  article .content h2,
+  article .content h3{
+    margin: 15px 0;
+  }
+  .post-foot{
+    margin-top: 30px;
+  }
+  .post-foot-top{
+    padding: 15px 0;
+  }
+  .bio{
+    margin-top: 30px;
+  }
+  .bio h5,
+  .bio p{
+    margin-left: 80px;
+  }
+  .bio ul{
+    margin: 10px 0 0 80px;
+    overflow: hidden;
+  }
+  .bio img{
+    width: 60px;
+    height: 60px;
+  }
+  footer#footer{
+    padding: 30px 0;
+  }
+}
+
+/* Retina
+ *************************************/
+
+@media screen and (-webkit-min-device-pixel-ratio : 1.5),screen and (min-device-pixel-ratio : 1.5){
+  header[role="banner"] .logo{
+    background-image: url(/img/logo@2x.png);
+    background-size: 37px 34px;
+  }
+}
