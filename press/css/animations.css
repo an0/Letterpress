@@ -39,7 +39,7 @@ nav.archive.header{
   }
   100%{
     -webkit-transform: translateY(0);
-    opacity: .8;
+    opacity: 1;
   }
 }
 @-moz-keyframes fadein{
@@ -49,6 +49,6 @@ nav.archive.header{
   }
   100%{
     -moz-transform: translateY(0);
-    opacity: .8;
+    opacity: 1;
   }
 }

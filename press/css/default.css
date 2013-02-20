@@ -22,7 +22,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 body{
   font-family: "PT Serif", Georgia, Times, "Times New Roman", "Songti SC", serif;
   font-size: 100%;
-  line-height: 200%;
+  line-height: 1.6;
   vertical-align: baseline;
   color: #18191a;
   background: #fff;
@@ -30,21 +30,19 @@ body{
 }
 a{
   cursor: pointer;
-  color: #000;
+  color: rgb(184,23,35);
   text-decoration: none;
   transition: all .25s;
 }
-article a{
-  border-bottom: 1px solid rgba(0,0,0,.5);
-}
-article a:hover{
-  border-color: rgba(0,0,0,0);
-  background: #fff4cc;
+article a:hover, .about a:hover{
+  border-bottom: 1px solid rgba(184,23,35,0.5);
 }
 h1,h2,h3,h4{
   font-family: "Source Sans Pro", Futura, "Helvetica Neue", Helvetica, "Lantinghei SC", "Kaiti SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+	line-height: 1.2;
 }
 h1 a,h2 a,h3 a,h4 a{
+  color: #000;
 	border: none;
 }
 code{
@@ -52,8 +50,14 @@ code{
 }
 .container{
   overflow: hidden;
-  width: 720px;
+  width: 640px;
   margin: 0 auto;
+}
+dl{
+	margin: 1em 0;
+}
+dd{
+	margin-left: 40px;
 }
 
 /* Header
@@ -77,11 +81,12 @@ header[role="banner"]{
   display: none;
 }
 .about{
+	display: block;
   margin-top: 20px;
+  font-family: "Source Sans Pro", Futura, "Helvetica Neue", Helvetica, "Lantinghei SC", "Kaiti SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   font-size: 1.125em;
   font-weight: normal;
-  line-height: 1.4em;
-  color: #000;
+  line-height: 1.4;
   text-align: center;
   text-shadow: 0 1px rgba(255,255,255,.4);
 }
@@ -132,7 +137,6 @@ nav.archive.footer{
 }
 nav.archive h1{
 	font-size: 2.0em;
-	line-height: 1.2em;
 }
 nav.archive .nav-prev{
 	float: left;
@@ -159,7 +163,6 @@ section.archive{
 }
 section.archive h1{
 	font-size: 2.0em;
-	line-height: 1.2em;
 }
 section.archive .archive-title{
 	text-align: center;
@@ -173,12 +176,11 @@ article header{
 }
 article header h1{
   font-size: 2.4em;
-  line-height: 1.6em;
 }
 article time{
   display: block;
   margin-bottom: 8px;
-  color: #a4abb2;
+  color: rgb(164,171,178);
   font-family: "Open Sans", Futura, "Helvetica Neue", Helvetica, "Lantinghei SC", "Kaiti SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   font-size: .75em;
   font-weight: 500;
@@ -186,8 +188,10 @@ article time{
   letter-spacing: .2em;
 }
 article time a{
-  color: #a4abb2;
-  border-bottom: none;
+  color: rgb(164,171,178);
+}
+article time a:hover{
+  border-color: rgba(164,171,178,0.5);
 }
 article .content{
   font-size: 1.25em;
@@ -229,17 +233,6 @@ article .content p code{
 article .content .intro{
   margin-top: 0;
 }
-article .content .prettyprint{
-  display: block;
-  margin-bottom: 20px;
-  padding: 12px 18px;
-  line-height: 1.3em;
-  color: #f5f9ff;
-  text-shadow: 0 1px 1px rgba(0,0,0,.2);
-  background: #30353d;
-  border-radius: 3px;
-  box-shadow: 0 -1px 2px rgba(0,0,0,.8) inset;
-}
 article .content blockquote{
 	  font-family: "PT Serif", Georgia, Times, "Times New Roman", "STFangsong", serif;
 	  padding-left: 10px;
@@ -264,7 +257,7 @@ hr {
 /* Disqus
  *************************************/
 #disqus_thread{
-	width: 720px;
+	width: 640px;
 	margin: 0 auto;
 }
 
@@ -272,30 +265,17 @@ hr {
  *************************************/
 .post-foot{
   margin-top: 40px;
-  line-height: 130%;
+  line-height: 1.3;
 }
 .post-foot-top{
   overflow: hidden;
   padding: 20px 0;
   text-align: right;
-  line-height: 120%;
+  line-height: 1;
   border-bottom: 1px solid #ddd;
-}
-a.link-home{
-  display: block;
-  float: left;
-	border-bottom: none;
-}
-a.link-home:hover{
-  background: none;
-}
-a.link-home img{
-	width: 20px;
-	height: 20px;	
 }
 .bio{
   margin-top: 60px;
-  line-height: 165%
 }
 .bio h5{
   margin: 0 0 10px 160px;
@@ -324,11 +304,20 @@ a.link-home img{
   margin-right: 5px;
   font-size: 60%;
 }
+.bio a.author-name{
+	color: #18191a;
+	border-bottom: none;
+	background: none;
+}
+.bio a.author-image{
+	display: block;
+	float: left;	
+  border-bottom: none;
+  background: none;
+}
 .bio img{
-  display: block;
-  float: left;
-  width: 120px;
-  height: 120px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
 }
 
@@ -338,15 +327,12 @@ a.link-home img{
 footer#footer{
   padding: 50px 0;
   border-top: 1px solid #ddd;
+  color: #666;
 }
 footer#footer p{
   display: block;
   font-size: 1em;
   text-align: center;
-  color: #666;
-}
-footer#footer p a{
-  padding-bottom: 2px;
 }
 
 /* Code
@@ -430,22 +416,21 @@ code .code-il { color: #2aa198; font-weight: bold } /* Literal.Number.Integer.Lo
 /* Responsiveness
  *************************************/
 
-@media screen and (max-width: 760px){
-  body{
-    font-size: 90%;
-  }
+@media screen and (max-width: 720px){
+	body{
+	  font-size: 90%;
+	}
   .container{
-    width: auto;
-    padding: 0 20px;
+    width: 85%;
   }
   #disqus_thread{
-		width: auto;
-		padding: 0 20px;
+    width: 85%;
   }
 }
-@media screen and (max-width: 480px){
+@media screen and (max-width: 568px){
   body{
     font-size: 80%;
+	  -webkit-text-size-adjust: none;
   }
   header[role="banner"]{
     padding: 10px 0 20px 0;

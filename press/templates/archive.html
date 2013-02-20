@@ -21,8 +21,7 @@
 	<header role="banner">
 	  <div class="container">
 	    <a href="/" class="logo"><img src="/img/logo@2x.png" alt="Logo" /></a>
-	    <h1 class="about">
-	      I am Ling Wang, an independent iOS developer living in US, originally from China. I make <a href="http://moke.com">Moke</a> and <a href="http://iwonderphone.com">Voodo</a>.
+      <p class="about">I am Ling Wang, an independent iOS developer living in US, originally from China. I make <a href="http://moke.com">Moke</a> and <a href="http://iwonderphone.com">Voodo</a>.</p>
 	    </h1>
 	    <ul class="headlinks">
 	      <li class="twitter">
@@ -41,7 +40,7 @@
   <section role="main" class="container">
     {{#monthly_archives}}
     <section class="archive">
-    	<a href="{{monthly_archive_url}}"><h1 class="archive-title">{{monthly_archive_title}}</h1></a>
+    	<h1 class="archive-title"><a href="{{monthly_archive_url}}">{{monthly_archive_title}}</a></h1>
 			{{#posts}}
 		  <article>
 		    <time datetime="{{date}}">{{pretty_date}}</time>
