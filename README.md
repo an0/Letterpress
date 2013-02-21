@@ -6,6 +6,7 @@ Letterpress is a minimal, [Markdown](http://daringfireball.net/projects/markdown
 * Python is prettier than PHP.
 * Static/text is more reliable than dynamic/database.
 * Markdown is more human-friendly than HTML.
+* Math writing is much easier in ASCIIMathML than in MathML.
 
 # Requirements
 1. A Linux kernel with inotify support is required to run Letterpress.
@@ -45,6 +46,7 @@ Letterpress builds these indices automatically:
 * Archive indices
 * Monthly indices
 * Yearly indices
+* Tag indice
 
 Letterpress writes logs into *press_folder* so you can easily review what is going on.
 
@@ -54,8 +56,14 @@ You write posts in such a natural format:
 title: Post Title
 date: Publishing date in the format specified in letterpress.config. The default format is 01/31/2013.
 excerpt: Summary of the post.
+tags: math, web
 
 Content of the post…
+
+### Let's have fun with math & physics
+
+$E=m*c^2$
+
 ```
 
 Refer to `press/sample_post.md` for a complete example.
@@ -77,9 +85,10 @@ You can publish posts by putting them in *press_folder* with whatever method you
 9. Now your *writing machine*'s *press_folder* and *publishing machine*'s *press_folder* are in sync. Whenever you put a new post into, edit an existing post in, or delete one from, your *press_folder* on your *writing machine*, Letterpress will generate, update, or delete the corresponding HTML file in *site_dir*(configured in `letterpress.config`) on your *publishing machine*.
 
 # Credits
-* Templates and style sheets are stolen from [Michiel de Graaf](https://github.com/michieldegraaf/blog).
+* Templates and style sheets are derived from [Michiel de Graaf's blog](https://github.com/michieldegraaf/blog).
 * [pyinotify](https://github.com/seb-m/pyinotify) by Sebastien Martini.
 * [python-markdown2](https://github.com/trentm/python-markdown2) by Trent Mick. My fork is used here because some necessary bug fixes are not merged back yet and also because I want to use my inline-styled footnotes. See [my fork](https://github.com/an0/python-markdown2) for details.
 * [Pygments](http://pygments.org) by Pocoo.
+* [MathJax](http://www.mathjax.org) for [ASCIIMathML](http://www1.chapman.edu/~jipsen/mathml/asciimath.html) processing and [MathML](http://www.mathjax.org) rendering.
 
 So I hardly did any thing but glue these awesome things together.
