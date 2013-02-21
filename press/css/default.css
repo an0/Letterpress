@@ -34,16 +34,18 @@ a{
   text-decoration: none;
   transition: all .25s;
 }
-article a:hover, .about a:hover{
+a:hover{
   border-bottom: 1px solid rgba(184,23,35,0.5);
 }
 h1,h2,h3,h4{
   font-family: "Source Sans Pro", Futura, "Helvetica Neue", Helvetica, "Lantinghei SC", "Kaiti SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
 	line-height: 1.2;
 }
-h1 a,h2 a,h3 a,h4 a{
-  color: #000;
-	border: none;
+h1 a, h2 a, h3 a, h4 a{
+	color: #000;
+}
+h1 a:hover, h2 a:hover, h3 a:hover, h4 a:hover{
+	border-bottom: none;
 }
 p.meta{
 	color: rgb(164,171,178);
@@ -78,12 +80,12 @@ header[role="banner"]{
   text-align: center;
   border-bottom: 1px solid #ddd;
 }
-.logo{
+a.logo{
   display: inline-block;
   width: 37px;
   height: 34px;
   margin-top: 20px;
-  border: 0 none;
+  border-bottom: none;
   background: url(/img/logo.png) no-repeat center center;
 }
 .logo img{
@@ -114,7 +116,7 @@ header[role="banner"]{
   display: block;
   color: #000;
   text-shadow: 0 1px rgba(255,255,255,.4);
-  border: 0 none;
+  border-bottom: none;
   opacity: .5;
 }
 .headlinks a:hover{
@@ -186,13 +188,13 @@ li.tag .tag-title{
 li.tag .tag-size{
 	padding-left: 20px;
 	padding-top: 3px;
-	overflow: auto;
+	overflow: hidden;
 }
 /* Articles
  *************************************/
 
 section[role="main"]{
-  overflow: hidden;
+  overflow: visible;
   padding-top: 20px;
   padding-bottom: 80px;
 }
@@ -322,7 +324,7 @@ hr {
   font-style: italic
 }
 .bio ul{
-  overflow: hidden;
+  height: 25px;
   margin: 10px 0 0 160px;
   font-size: 1.125em;
 }
@@ -337,7 +339,7 @@ hr {
   font-size: 60%;
 }
 .bio a.author-name{
-	color: #18191a;
+	color: #000;
 	border-bottom: none;
 	background: none;
 }

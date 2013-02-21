@@ -61,7 +61,7 @@ def format(template, **kwargs):
 pygments_options = {'cssclass': 'code', 'classprefix': 'code-'}
 
 class Post(object):
-    def __new__(cls, file_path, base_url, templates_dir, date_format):
+    def __new__(cls, file_path, base_url, templates_dir, date_format, math_delimiter):
         file_name=os.path.basename(file_path)
         logger.debug('Post: %s', file_name)
         text = ""
@@ -80,14 +80,11 @@ class Post(object):
         self.rest_text = rest_text
         return self
         
-    def __init__(self, file_path, base_url, templates_dir, date_format):
+    def __init__(self, file_path, base_url, templates_dir, date_format, math_delimiter):
         meta_data = self.meta_data
         del self.meta_data
         rest_text = self.rest_text
         del self.rest_text
-        content = markdown2.markdown(rest_text, extras={'fenced-code-blocks': pygments_options, 'footnotes': True})
-        # Process user written <code lang="programming-lang"></code> blocks or spans.
-        content = self._format_code_lang(content)
         self.file_path = file_path
         self.title = meta_data['title']
         self.title = self.title.replace('"', '&quot;')
@@ -103,16 +100,34 @@ class Post(object):
         self.excerpt = self.excerpt.replace('"', '&quot;')
         self.excerpt = self.excerpt.replace("'", "&#39;")
         self.tags = []
+        is_math = False
         for tag_name in meta_data.get('tags', '').split(','):
             tag_name = tag_name.strip()
             if tag_name:
                 self.tags.append(tag_name)
+                if tag_name.lower() == 'math':
+                    is_math = True
         base_name = os.path.splitext(os.path.basename(file_path))[0]
         self.path = '{year:04}/{month:02}/{base_name}.html'.format(year=self.date.year, month=self.date.month, base_name=base_name.lower().replace(' ', '-'))
         self.permalink = os.path.join(base_url, self.path)
         with open(os.path.join(templates_dir, "post.html")) as f:       
             template = f.read()
-        self.html = format(template, title=self.title, date=self.date.strftime('%Y-%m-%d'), monthly_archive_url=os.path.dirname(self.permalink) + '/', year=self.date.strftime('%Y'), month=self.date.strftime('%B'), day=self.date.strftime('%d'), tags=', '.join(['<a href="/tags/{tag}">{tag}</a>'.format(tag=tag) for tag in self.tags]), permalink=self.permalink, excerpt=self.excerpt, content=content)
+        content = markdown2.markdown(rest_text, extras={'fenced-code-blocks': pygments_options, 'footnotes': True, 'math_delimiter': math_delimiter if is_math else None})
+        # Process user written <code lang="programming-lang"></code> blocks or spans.
+        content = self._format_code_lang(content)            
+        self.html = format(template, title=self.title, date=self.date.strftime('%Y-%m-%d'), monthly_archive_url=os.path.dirname(self.permalink) + '/', year=self.date.strftime('%Y'), month=self.date.strftime('%B'), day=self.date.strftime('%d'), tags=', '.join('<a href="/tags/{tag}">{tag}</a>'.format(tag=tag) for tag in self.tags), permalink=self.permalink, excerpt=self.excerpt, content=content)
+        # Load MathJax for post with math tag.
+        if is_math:
+            self.html = self.html.replace('</head>', '''
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  asciimath2jax: {
+    delimiters: [['%s','%s']]
+  }
+});
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
+</head>''' % (math_delimiter, math_delimiter))
 
     def __str__(self):
         return '{title}({date})'.format(title=self.title, date=self.pretty_date)
@@ -485,7 +500,7 @@ def main():
     
     # Initial complete site building.
     def create_post(file_path):
-        post = Post(file_path, base_url=config['base_url'], templates_dir=templates_dir, date_format=config['date_format'])
+        post = Post(file_path, base_url=config['base_url'], templates_dir=templates_dir, date_format=config['date_format'], math_delimiter=config.get('math_delimiter', '$'))
         if not post: return None
         output_file_path = os.path.join(site_dir, post.path)
         output_dir = os.path.dirname(output_file_path)
