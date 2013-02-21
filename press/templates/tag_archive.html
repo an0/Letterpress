@@ -18,29 +18,27 @@
 	<link rel="stylesheet" href="/css/animations.css" />
 </head>
 <body>
-  <header role="banner">
-    <div class="container">
-      <a href="/" class="logo"><img src="/img/logo@2x.png" alt="Logo" /></a>
+	<header role="banner">
+	  <div class="container">
+	    <a href="/" class="logo"><img src="/img/logo@2x.png" alt="Logo" /></a>
 			<nav class="archive header">
-				<h1><a class="nav-prev" href="{{prev_archive_url}}">{{prev_archive_title}}</a></h1>
-				<h1><a class="nav-next" href="{{next_archive_url}}">{{next_archive_title}}</a></h1>
-				<h1 class="archive-title">{{month}}, <a href="{{yearly_archive_url}}">{{year}}</a></h1>
+				<h1 class="archive-title">{{archive_title}}</h1>
 			</nav>
-    </div>
-  </header>
+	  </div>
+	</header>
 
   <section role="main" class="container">
 		{{#posts}}
-	  <article>
-	    <header>
+		<article>
+		  <header>
 			  <p class="meta"><time datetime="{{date}}">{{pretty_date}}</time></p>
-	      <h2><a href="{{permalink}}">{{title}}</a></h2>
-	    </header>
-	    <section class="content">
-	      <p class="intro">{{excerpt}}</p>
-	    </section>
-	  </article>
-	  {{/posts}}
+		    <h2><a href="{{permalink}}">{{title}}</a></h2>
+		  </header>
+		  <section class="content">
+		    <p class="intro">{{excerpt}}</p>
+		  </section>
+		</article>
+		{{/posts}}
   </section>
 
   <footer id="footer">

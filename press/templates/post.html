@@ -26,8 +26,8 @@
 
   <section role="main" class="container">
 	  <article>
-	    <time datetime="{{date}}"><a href="{{monthly_archive_url}}">{{month}}</a> {{day}}, {{year}}</time>
 	    <header>
+		    <p class="meta" id="time"><time datetime="{{date}}"><a href="{{monthly_archive_url}}">{{month}}</a> {{day}}, {{year}}</time></p>
 	      <h1>{{title}}</h1>
 	    </header>
 	    <section class="content">
@@ -35,6 +35,7 @@
 	    </section>
 	    <footer role="contentinfo" class="post-foot">
 	      <section class="post-foot-top">
+	 		    <p class="meta" id="tags">{{tags}}</p>
 	        <a href="https://twitter.com/share" class="twitter-share-button" data-text="{{title}} by @an0: {{excerpt}}">Tweet</a>
 	        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 	      </section>

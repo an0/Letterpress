@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Wangling - Archive</title>
+  <title>Wangling - Tags</title>
 		
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -38,22 +38,14 @@
 	</header>
 
   <section role="main" class="container">
-    {{#monthly_archives}}
-    <section class="archive">
-    	<h1 class="archive-title"><a href="{{monthly_archive_url}}">{{monthly_archive_title}}</a></h1>
-			{{#posts}}
-		  <article>
-		    <header>
-			    <p class="meta"><time datetime="{{date}}">{{pretty_date}}</time></p>
-		      <h2><a href="{{permalink}}">{{title}}</a></h2>
-		    </header>
-				<section class="content">
-				  <p class="intro">{{excerpt}}</p>
-				</section>
-		  </article>
-		  {{/posts}}
-    </section>
-    {{/monthly_archives}}
+  	<ul class="tags">
+	    {{#tags}}
+	    <li class="tag">
+		    <h2 class="tag-title"><a href="{{tag_url}}">{{tag_title}}</a></h2>
+		    <p class="meta tag-size">{{tag_size}}</p>
+	    </li>
+	    {{/tags}}
+    </ul>
   </section>
 
   <footer id="footer">

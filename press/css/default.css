@@ -45,6 +45,15 @@ h1 a,h2 a,h3 a,h4 a{
   color: #000;
 	border: none;
 }
+p.meta{
+	color: rgb(164,171,178);
+}
+p.meta a{
+  color: rgb(164,171,178);
+}
+p.meta a:hover{
+  border-bottom: 1px solid rgba(164,171,178,0.5);
+}
 code{
   font-family: Menlo, Monaco, Consolas, "Source Code Pro", monospace;
 }
@@ -150,14 +159,8 @@ nav.archive .archive-title{
 	margin-right: 20px;
 }
 
-/* Articles
+/* Archives
  *************************************/
-
-section[role="main"]{
-  overflow: hidden;
-  padding-top: 20px;
-  padding-bottom: 80px;
-}
 section.archive{
 	margin-top: 80px;
 }
@@ -166,6 +169,32 @@ section.archive h1{
 }
 section.archive .archive-title{
 	text-align: center;
+}
+
+/* Tags
+ *************************************/
+ul.tags{
+	list-style: none;
+}
+li.tag{
+	margin-top: 30px;
+	overflow: hidden;
+}
+li.tag .tag-title{
+	float: left;
+}
+li.tag .tag-size{
+	padding-left: 20px;
+	padding-top: 3px;
+	overflow: auto;
+}
+/* Articles
+ *************************************/
+
+section[role="main"]{
+  overflow: hidden;
+  padding-top: 20px;
+  padding-bottom: 80px;
 }
 article{
   margin-top: 60px;
@@ -177,34 +206,37 @@ article header{
 article header h1{
   font-size: 2.4em;
 }
-article time{
-  display: block;
-  margin-bottom: 8px;
-  color: rgb(164,171,178);
+article header p.meta{
   font-family: "Open Sans", Futura, "Helvetica Neue", Helvetica, "Lantinghei SC", "Kaiti SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-  font-size: .75em;
-  font-weight: 500;
+	font-size: .75em;
+	font-weight: 500;
+	letter-spacing: .2em;
+	margin-bottom: 8px;
+}
+article time{
   text-transform: uppercase;
-  letter-spacing: .2em;
 }
-article time a{
-  color: rgb(164,171,178);
-}
-article time a:hover{
-  border-color: rgba(164,171,178,0.5);
+article p#tags{
+	float: left;
 }
 article .content{
   font-size: 1.25em;
 }
-article .content h2,
-article .content h3{
-  margin: 30px 0;
-}
 article .content h2{
   font-size: 1.4em;
+  margin: 45px 0 30px
 }
 article .content h3{
+  font-size: 1.3em;
+  margin: 40px 0 30px;
+}
+article .content h4{
   font-size: 1.2em;
+  margin: 35px 0 20px;
+}
+article .content h5{
+  font-size: 1.1em;
+  margin: 30px 0 20px;
 }
 article .content p{
   margin-bottom: 20px;
@@ -466,10 +498,18 @@ code .code-il { color: #2aa198; font-weight: bold } /* Literal.Number.Integer.Lo
   article header h1{
     font-size: 1.9em;
   }
-  article .content h2,
-  article .content h3{
-    margin: 15px 0;
-  }
+	article .content h2{
+	  margin: 35px 0 25px
+	}
+	article .content h3{
+	  margin: 30px 0 25px;
+	}
+	article .content h4{
+	  margin: 25px 0 15px;
+	}
+	article .content h5{
+	  margin: 20px 0 15px;
+	}
   .post-foot{
     margin-top: 30px;
   }

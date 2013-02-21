@@ -102,12 +102,17 @@ class Post(object):
                 self.excerpt = rest_text
         self.excerpt = self.excerpt.replace('"', '&quot;')
         self.excerpt = self.excerpt.replace("'", "&#39;")
+        self.tags = []
+        for tag_name in meta_data.get('tags', '').split(','):
+            tag_name = tag_name.strip()
+            if tag_name:
+                self.tags.append(tag_name)
         base_name = os.path.splitext(os.path.basename(file_path))[0]
         self.path = '{year:04}/{month:02}/{base_name}.html'.format(year=self.date.year, month=self.date.month, base_name=base_name.lower().replace(' ', '-'))
         self.permalink = os.path.join(base_url, self.path)
         with open(os.path.join(templates_dir, "post.html")) as f:       
-            template = f.read()            
-        self.html = format(template, title=self.title, date=self.date.strftime('%Y-%m-%d'), monthly_archive_url=os.path.dirname(self.permalink) + '/', year=self.date.strftime('%Y'), month=self.date.strftime('%B'), day=self.date.strftime('%d'), permalink=self.permalink, excerpt=self.excerpt, content=content)
+            template = f.read()
+        self.html = format(template, title=self.title, date=self.date.strftime('%Y-%m-%d'), monthly_archive_url=os.path.dirname(self.permalink) + '/', year=self.date.strftime('%Y'), month=self.date.strftime('%B'), day=self.date.strftime('%d'), tags=', '.join(['<a href="/tags/{tag}">{tag}</a>'.format(tag=tag) for tag in self.tags]), permalink=self.permalink, excerpt=self.excerpt, content=content)
 
     def __str__(self):
         return '{title}({date})'.format(title=self.title, date=self.pretty_date)
@@ -177,6 +182,46 @@ class Post(object):
         formatter = HtmlCodeFormatter(**pygments_options)
         return pygments.highlight(code, lexer, formatter)
 
+
+
+class Tag(object):
+    def __init__(self, name, posts):
+        self.name = name
+        self.posts = posts
+        self.path = ('tags/' + name + '/')
+        url_comps = urllib.parse.urlparse(posts[0].permalink)
+        self.permalink = urllib.parse.urlunparse(url_comps[:2] + (self.path,) + (None,) * 3)
+
+    def build_index(self, templates_dir):
+        with open(os.path.join(templates_dir, "tag_archive.html")) as f:
+            template = f.read()  
+        posts_match = _posts_re.search(template)
+        post_template = posts_match.group(1)
+        header_template = template[:posts_match.start()]
+        header = format(header_template, archive_title=self.name)
+        post_list = []
+        for post in self.posts:
+            if not post:
+                break
+            post_list.append(format(post_template, title=post.title, date=post.date.strftime('%Y-%m-%d'), pretty_date=post.pretty_date, permalink=post.permalink, excerpt=post.excerpt))
+        index = header + ''.join(post_list) +  template[posts_match.end():]
+        return index
+
+    def __str__(self):
+        return '{name}\n{posts}'.format(name=self.name, posts=self.posts)
+    
+    def __repr__(self):
+        return str(self)
+    
+    def __gt__(self, other):
+        return self.name.lower() > other.name.lower()
+    def __lt__(self, other):
+        return self.name.lower() < other.name.lower()
+    def __ge__(self, other):
+        return self.name.lower() >= other.name.lower()
+    def __le__(self, other):
+        return self.name.lower() <= other.name.lower()
+    
 
 
 class MonthlyArchive(object):
@@ -329,7 +374,6 @@ class TimelineArchive(object):
         return self.index <= other.index
 
 
-
     
 class Struct(object):
     '''http://docs.python.org/3/tutorial/classes.html#odds-and-ends'''
@@ -338,6 +382,7 @@ class Struct(object):
 
 
 _posts_re = re.compile(r'{{#posts}}(.*){{/posts}}', re.S)
+_tags_re = re.compile(r'{{#tags}}(.*){{/tags}}', re.S)
 _monthly_archives_re = re.compile(r'{{#monthly_archives}}(.*){{/monthly_archives}}', re.S)
     
 
@@ -361,8 +406,10 @@ def grouper(n, iterable, fillvalue=None):
 
 
 posts = {}
+timeline_archives = []
 monthly_archives = {}
 yearly_archives = {}
+tags = {}
 
 
     
@@ -450,11 +497,60 @@ def main():
         del post.html
         return post
         
+    def create_tags(posts):
+        global tags
+        tags.clear()
+        archive_list = [None]
+        month = datetime.date.min
+        posts_of_tags = {}
+        sorted_posts = sorted(posts.values())
+        for post in sorted_posts:
+            for tag_name in post.tags:
+                posts_of_tag = posts_of_tags.get(tag_name)
+                if posts_of_tag:
+                    posts_of_tag.append(post)
+                else:
+                    posts_of_tags[tag_name] = [post]
+        for tag_name, tag_posts in posts_of_tags.items():
+            tag = Tag(tag_name, tag_posts)
+            tags[tag_name] = tag
+            create_tag_index(tag)
+            
+        with open(os.path.join(templates_dir, "tags.html")) as f:
+            template = f.read()
+        tags_match = _tags_re.search(template)
+        tags_template = tags_match.group(1)
+        tag_list = []
+        for tag in sorted(tags.values()):
+            post_count = len(tag.posts)
+            tag_list.append(format(tags_template, tag_title=tag.name, tag_url=tag.permalink, tag_size=str(len(tag.posts)) + ' ' +  ('Articles' if post_count > 1 else 'Article')))
+        index = template[:tags_match.start()] + ''.join(tag_list) + template[tags_match.end():]
+        output_dir = os.path.join(site_dir, 'tags')
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+        output_file_path = os.path.join(output_dir, 'index.html')
+        with codecs.open(output_file_path, 'w', 'utf-8') as output_file:
+            output_file.write(index)    
+
+
+    def create_tag_index(tag):
+        index = tag.build_index(templates_dir)
+        output_dir = os.path.join(site_dir, tag.path)
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+        output_file_path = os.path.join(output_dir, 'index.html')
+        with codecs.open(output_file_path, 'w', 'utf-8') as output_file:
+            output_file.write(index)
+                
     def create_timeline_archives(posts):
+        global timeline_archives
+        del timeline_archives[:]
         sorted_posts = sorted(posts.values(), reverse=True)
         archive_list = [None]
         for index, post_group in enumerate(grouper(5, sorted_posts)):
-            archive_list.append(TimelineArchive(index, post_group))
+            archive = TimelineArchive(index, post_group)
+            timeline_archives.append(archive)
+            archive_list.append(archive)
         archive_list.append(None)
         for next_archive, archive, prev_archive in triplepwise(archive_list):
             create_timeline_index(archive, prev_archive, next_archive)        
@@ -596,6 +692,7 @@ def main():
                         shutil.copyfile(path, dst)
                     except Exception as e:
                         logger.error(e)
+        create_tags(posts)
         create_timeline_archives(posts)
         create_monthly_archives(posts)
         create_yearly_archives(monthly_archives)
@@ -622,8 +719,8 @@ def main():
                             build_site()
                         return
                     elif os.path.splitext(event.pathname)[1] == config['markdown_ext']:
-                        # New post or post changed.
                         if event.mask & file_create_mask:
+                            # New post or post changed.
                             post = create_post(event.pathname)
                             if not post: return
                             if post.file_path in posts:
@@ -631,11 +728,13 @@ def main():
                             else:
                                 logger.info('New post: %s', os.path.basename(event.pathname))
                             posts[post.file_path] = post
+                            create_tags(posts)
                             create_timeline_archives(posts)
                             create_monthly_archives(posts)
                             create_yearly_archives(monthly_archives)
                             create_complete_archive(monthly_archives)
                         elif event.mask & delete_mask:
+                            # Delete post.
                             logger.info('Delete post: %s', os.path.basename(event.pathname))
                             post = posts.pop(event.pathname, None)
                             if post:
@@ -645,6 +744,26 @@ def main():
                                         os.remove(dst)
                                     except:
                                         logger.exception('Can not delete %s', dst)
+                                for tag_name in post.tags:
+                                    tag = tags.get(tag_name)
+                                    if tag:
+                                        try:
+                                            tag.posts.remove(post)
+                                        except:
+                                            pass
+                                        if not tag.posts:
+                                            # The tag is empty now. Remove it.
+                                            tags.pop(tag_name, None)
+                                            dst = os.path.join(site_dir, tag.path)
+                                            if os.path.exists(dst):
+                                                shutil.rmtree(dst, ignore_errors=True)
+                                if len(posts) % 5 == 0 and len(timeline_archives) > 1:
+                                    # Last timeline archive is empty. Remove it.
+                                    last_timeline_archive = timeline_archives.pop()
+                                    dst = os.path.join(site_dir, last_timeline_archive.path)
+                                    if os.path.exists(dst):
+                                        shutil.rmtree(dst, ignore_errors=True)
+                                        
                                 monthly_archive = monthly_archives.get(datetime.date(post.date.year, post.date.month, 1))
                                 if monthly_archive:
                                     try:
@@ -654,7 +773,7 @@ def main():
                                     if not monthly_archive.posts:
                                         # The month is empty now. Remove it.
                                         monthly_archives.pop(monthly_archive.month, None)
-                                        dst = os.path.dirname(dst)
+                                        dst = os.path.join(site_dir, monthly_archive.path)
                                         if os.path.exists(dst):
                                             shutil.rmtree(dst, ignore_errors=True)
                                         yearly_archive = yearly_archives.get(datetime.date(monthly_archive.month.year, 1, 1))
@@ -666,10 +785,11 @@ def main():
                                             if not yearly_archive.monthly_archives:
                                                 # The year is empty now. Remove it.
                                                 yearly_archives.pop(yearly_archive.year, None)
-                                                dst = os.path.dirname(dst)
+                                                dst = os.path.join(site_dir, yearly_archive.path)
                                                 if os.path.exists(dst):
                                                     shutil.rmtree(dst, ignore_errors=True)
-                                    
+
+                                create_tags(posts)
                                 create_timeline_archives(posts)
                                 create_monthly_archives(posts)
                                 create_yearly_archives(monthly_archives)
