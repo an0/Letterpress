@@ -87,7 +87,7 @@ You can publish posts by putting them in *press_folder* with whatever method you
 # Credits
 * Templates and style sheets are derived from [Michiel de Graaf's blog](https://github.com/michieldegraaf/blog).
 * [pyinotify](https://github.com/seb-m/pyinotify) by Sebastien Martini.
-* [python-markdown2](https://github.com/trentm/python-markdown2) by Trent Mick. My [fork]((https://github.com/an0/python-markdown2)) is used here because:
+* [python-markdown2](https://github.com/trentm/python-markdown2) by Trent Mick. My [fork](https://github.com/an0/python-markdown2) is used here because:
 
 	1. Some necessary bug fixes are not merged back yet.
 	2. Some extension is required to support ASCIIMathML embedding.
