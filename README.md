@@ -46,7 +46,7 @@ Letterpress builds these indices automatically:
 * Archive indices
 * Monthly indices
 * Yearly indices
-* Tag indice
+* Tag indices
 
 Letterpress writes logs into *press_folder* so you can easily review what is going on.
 
