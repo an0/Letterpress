@@ -163,7 +163,6 @@ MathJax.Hub.Config({
         lexer = self._get_pygments_lexer(lang)
         if lexer:
             return self._color_with_pygments(code, lexer)
-            #return sub
         else:
             return match.group(0)
 
