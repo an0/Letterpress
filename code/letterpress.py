@@ -22,7 +22,6 @@ import codecs
 import datetime
 import os.path
 import urllib.parse
-import glob
 import shutil
 import itertools
 import pyinotify
@@ -31,8 +30,8 @@ import pyinotify
 logger = logging.getLogger('Letterpress')
 
 
-
 _meta_data_re = re.compile(r"""(?:\s*\n)*((?:\w+:.*\n)+)(?:\s*\n)+""", re.U)
+
 
 def extract_meta_data(text):
     meta_data = {}
@@ -41,28 +40,29 @@ def extract_meta_data(text):
     if not m:
         logger.error('No meta data')
         return meta_data, text
-    
+
     lines = m.group(1).splitlines()
     for line in lines:
         k, v = line.split(':', 1)
         v = v.strip()
         if v:
             meta_data[k] = v
-            
+
     return meta_data, text[m.end():]
 
 
-
 _template_re = re.compile(r'{{([^{}]+)}}')
+
 
 def format(template, **kwargs):
     return _template_re.sub(lambda m: kwargs[m.group(1)], template)
 
 pygments_options = {'cssclass': 'code', 'classprefix': 'code-'}
 
+
 class Post(object):
     def __new__(cls, file_path, base_url, templates_dir, date_format, math_delimiter):
-        file_name=os.path.basename(file_path)
+        file_name = os.path.basename(file_path)
         logger.debug('Post: %s', file_name)
         text = ""
         with codecs.open(file_path, 'r', 'utf-8') as f:
@@ -79,7 +79,7 @@ class Post(object):
         self.meta_data = meta_data
         self.rest_text = rest_text
         return self
-        
+
     def __init__(self, file_path, base_url, templates_dir, date_format, math_delimiter):
         meta_data = self.meta_data
         del self.meta_data
@@ -110,11 +110,11 @@ class Post(object):
         base_name = os.path.splitext(os.path.basename(file_path))[0]
         self.path = '{year:04}/{month:02}/{base_name}.html'.format(year=self.date.year, month=self.date.month, base_name=base_name.lower().replace(' ', '-'))
         self.permalink = os.path.join(base_url, self.path)
-        with open(os.path.join(templates_dir, "post.html")) as f:       
+        with open(os.path.join(templates_dir, "post.html")) as f:
             template = f.read()
         content = markdown2.markdown(rest_text, extras={'fenced-code-blocks': pygments_options, 'footnotes': True, 'math_delimiter': math_delimiter if is_math else None})
         # Process user written <code lang="programming-lang"></code> blocks or spans.
-        content = self._format_code_lang(content)            
+        content = self._format_code_lang(content)
         self.html = format(template, title=self.title, date=self.date.strftime('%Y-%m-%d'), monthly_archive_url=os.path.dirname(self.permalink) + '/', year=self.date.strftime('%Y'), month=self.date.strftime('%B'), day=self.date.strftime('%d'), tags=', '.join('<a href="/tags/{tag}">{tag}</a>'.format(tag=tag) for tag in self.tags), permalink=self.permalink, excerpt=self.excerpt, content=content)
         # Load MathJax for post with math tag.
         if is_math:
@@ -131,16 +131,19 @@ MathJax.Hub.Config({
 
     def __str__(self):
         return '{title}({date})'.format(title=self.title, date=self.pretty_date)
-    
+
     def __repr__(self):
         return str(self)
-    
+
     def __gt__(self, other):
         return self.date > other.date
+
     def __lt__(self, other):
         return self.date < other.date
+
     def __ge__(self, other):
         return self.date >= other.date
+
     def __le__(self, other):
         return self.date <= other.date
 
@@ -153,16 +156,16 @@ MathJax.Hub.Config({
         </code>             # the matching end tag
     """,
     re.X | re.M)
+
     def _code_span_sub(self, match):
         lang = match.group(2)
         code = match.group(3)
         lexer = self._get_pygments_lexer(lang)
         if lexer:
             return self._color_with_pygments(code, lexer)
-            return sub
         else:
             return match.group(0)
-        
+
     def _format_code_lang(self, text):
         return self._code_span_re.sub(self._code_span_sub, text)
 
@@ -198,7 +201,6 @@ MathJax.Hub.Config({
         return pygments.highlight(code, lexer, formatter)
 
 
-
 class Tag(object):
     def __init__(self, name, posts):
         self.name = name
@@ -209,7 +211,7 @@ class Tag(object):
 
     def build_index(self, templates_dir):
         with open(os.path.join(templates_dir, "tag_archive.html")) as f:
-            template = f.read()  
+            template = f.read()
         posts_match = _posts_re.search(template)
         post_template = posts_match.group(1)
         header_template = template[:posts_match.start()]
@@ -219,24 +221,26 @@ class Tag(object):
             if not post:
                 break
             post_list.append(format(post_template, title=post.title, date=post.date.strftime('%Y-%m-%d'), pretty_date=post.pretty_date, permalink=post.permalink, excerpt=post.excerpt))
-        index = header + ''.join(post_list) +  template[posts_match.end():]
+        index = header + ''.join(post_list) + template[posts_match.end():]
         return index
 
     def __str__(self):
         return '{name}\n{posts}'.format(name=self.name, posts=self.posts)
-    
+
     def __repr__(self):
         return str(self)
-    
+
     def __gt__(self, other):
         return self.name.lower() > other.name.lower()
+
     def __lt__(self, other):
         return self.name.lower() < other.name.lower()
+
     def __ge__(self, other):
         return self.name.lower() >= other.name.lower()
+
     def __le__(self, other):
         return self.name.lower() <= other.name.lower()
-    
 
 
 class MonthlyArchive(object):
@@ -248,7 +252,7 @@ class MonthlyArchive(object):
 
     def build_index(self, templates_dir, prev_archive=None, next_archive=None):
         with open(os.path.join(templates_dir, "monthly_archive.html")) as f:
-            template = f.read()  
+            template = f.read()
         posts_match = _posts_re.search(template)
         header_template = template[:posts_match.start()]
         prev_archive_title = ''
@@ -267,23 +271,25 @@ class MonthlyArchive(object):
         for post in self.posts:
             post_list.append(format(post_template, title=post.title, date=post.date.strftime('%Y-%m-%d'), pretty_date=post.pretty_date, permalink=post.permalink, excerpt=post.excerpt))
         index = header + ''.join(post_list) + template[posts_match.end():]
-        return index        
+        return index
 
     def __str__(self):
         return '{month}\n{posts}'.format(month=self.month.strftime('%Y-%m'), posts=self.posts)
-    
+
     def __repr__(self):
         return str(self)
-    
+
     def __gt__(self, other):
         return self.month > other.month
+
     def __lt__(self, other):
         return self.month < other.month
+
     def __ge__(self, other):
         return self.month >= other.month
+
     def __le__(self, other):
         return self.month <= other.month
-
 
 
 class YearlyArchive(object):
@@ -315,7 +321,7 @@ class YearlyArchive(object):
         post_template = posts_match.group(1)
         monthly_archive_footer = monthly_archive_template[posts_match.end():]
         monthly_archive_list = []
-        for monthly_archive in self.monthly_archives:            
+        for monthly_archive in self.monthly_archives:
             post_list = []
             for post in monthly_archive.posts:
                 post_list.append(format(post_template, title=post.title, date=post.date.strftime('%Y-%m-%d'), pretty_date=post.pretty_date, permalink=post.permalink, excerpt=post.excerpt))
@@ -325,20 +331,22 @@ class YearlyArchive(object):
 
     def __str__(self):
         return '{year}\n{monthly_archives}'.format(year=self.year.strftime('%Y'), monthly_archives=self.monthly_archives)
-    
+
     def __repr__(self):
         return str(self)
-    
+
     def __gt__(self, other):
         return self.year > other.year
+
     def __lt__(self, other):
         return self.year < other.year
+
     def __ge__(self, other):
         return self.year >= other.year
+
     def __le__(self, other):
         return self.year <= other.year
-    
-        
+
 
 class TimelineArchive(object):
     def __init__(self, index, posts):
@@ -350,7 +358,7 @@ class TimelineArchive(object):
 
     def build_index(self, templates_dir, prev_archive=None, next_archive=None):
         with open(os.path.join(templates_dir, "index.html")) as f:
-            template = f.read()  
+            template = f.read()
         posts_match = _posts_re.search(template)
         footer_template = template[posts_match.end():]
         prev_archive_title = ''
@@ -375,31 +383,32 @@ class TimelineArchive(object):
 
     def __str__(self):
         return '{index}\n{posts}'.format(index=self.index, posts=self.posts)
-    
+
     def __repr__(self):
         return str(self)
-    
+
     def __gt__(self, other):
         return self.index > other.index
+
     def __lt__(self, other):
+
         return self.index < other.index
+
     def __ge__(self, other):
         return self.index >= other.index
+
     def __le__(self, other):
         return self.index <= other.index
 
 
-    
 class Struct(object):
     '''http://docs.python.org/3/tutorial/classes.html#odds-and-ends'''
     pass
 
 
-
 _posts_re = re.compile(r'{{#posts}}(.*){{/posts}}', re.S)
 _tags_re = re.compile(r'{{#tags}}(.*){{/tags}}', re.S)
 _monthly_archives_re = re.compile(r'{{#monthly_archives}}(.*){{/monthly_archives}}', re.S)
-    
 
 
 def triplepwise(iterable):
@@ -411,13 +420,11 @@ def triplepwise(iterable):
     return zip(a, b, c)
 
 
-
 def grouper(n, iterable, fillvalue=None):
     "Collect data into fixed-length chunks or blocks"
     # grouper(3, 'ABCDEFG', 'x') --> ABC DEF Gxx"
     args = [iter(iterable)] * n
     return itertools.zip_longest(*args, fillvalue=fillvalue)
-
 
 
 posts = {}
@@ -427,13 +434,12 @@ yearly_archives = {}
 tags = {}
 
 
-    
 def main():
     # Command line arguments parsing
     cmdln_desc = 'A markdown based blog system.'
     if argparse:
         usage = " %(prog)s PUBLISHED_DIR"
-        version = "%(prog)s "+__version__
+        version = "%(prog)s " + __version__
         parser = argparse.ArgumentParser(prog="letterpress", description=cmdln_desc, formatter_class=argparse.RawDescriptionHelpFormatter)
         parser.add_argument("published_dir", metavar="PUBLISHED_DIR")
         parser.add_argument("-v", "--verbose", dest="log_level",
@@ -445,7 +451,7 @@ def main():
         published_dir = options.published_dir
     else:
         usage = " %prog PUBLISHED_DIR"
-        version = "%prog "+__version__
+        version = "%prog " + __version__
         parser = optparse.OptionParser(prog="letterpress", usage=usage,
                                                  version=version, description=cmdln_desc)
         parser.add_option("-v", "--verbose", dest="log_level",
@@ -453,7 +459,7 @@ def main():
                                 help="more verbose output")
         parser.set_defaults(log_level=logging.INFO)
         options, args = parser.parse_args()
-        if len(args) != 1:              
+        if len(args) != 1:
             parser.print_help()
             return
         published_dir = args[0]
@@ -467,7 +473,7 @@ def main():
     stream_handler.setFormatter(logging_formatter)
     log_file = 'letterpress.log'
     # file_handler = logging.handlers.TimedRotatingFileHandler(os.path.join(published_dir, 'letterpress.log'), when='D', interval=1, backupCount=7, utc=True)
-    file_handler = logging.handlers.RotatingFileHandler(os.path.join(published_dir, log_file), maxBytes=64*1024, backupCount=3)
+    file_handler = logging.handlers.RotatingFileHandler(os.path.join(published_dir, log_file), maxBytes=64 * 1024, backupCount=3)
     file_handler.setFormatter(logging_formatter)
     logger.addHandler(stream_handler)
     logger.addHandler(file_handler)
@@ -477,7 +483,8 @@ def main():
     with open(os.path.join(published_dir, 'letterpress.config')) as config_file:
         for line in config_file.readlines():
             line = line.strip()
-            if len(line) == 0 or line.startswith('#'): continue
+            if len(line) == 0 or line.startswith('#'):
+                continue
             key, value = line.split(':', 1)
             config[key.strip()] = value.strip()
     logger.info('Site configure: %s', config)
@@ -497,11 +504,12 @@ def main():
                 os.remove(path)
             except:
                 logger.exception('Can not delete %s', path)
-    
+
     # Initial complete site building.
     def create_post(file_path):
         post = Post(file_path, base_url=config['base_url'], templates_dir=templates_dir, date_format=config['date_format'], math_delimiter=config.get('math_delimiter', '$'))
-        if not post: return None
+        if not post:
+            return None
         output_file_path = os.path.join(site_dir, post.path)
         output_dir = os.path.dirname(output_file_path)
         if not os.path.exists(output_dir):
@@ -511,12 +519,10 @@ def main():
         # html will never be used again. So let's get rid off it to spare some memory.
         del post.html
         return post
-        
+
     def create_tags(posts):
         global tags
         tags.clear()
-        archive_list = [None]
-        month = datetime.date.min
         posts_of_tags = {}
         sorted_posts = sorted(posts.values())
         for post in sorted_posts:
@@ -530,7 +536,7 @@ def main():
             tag = Tag(tag_name, tag_posts)
             tags[tag_name] = tag
             create_tag_index(tag)
-            
+
         with open(os.path.join(templates_dir, "tags.html")) as f:
             template = f.read()
         tags_match = _tags_re.search(template)
@@ -538,15 +544,14 @@ def main():
         tag_list = []
         for tag in sorted(tags.values()):
             post_count = len(tag.posts)
-            tag_list.append(format(tags_template, tag_title=tag.name, tag_url=tag.permalink, tag_size=str(len(tag.posts)) + ' ' +  ('Articles' if post_count > 1 else 'Article')))
+            tag_list.append(format(tags_template, tag_title=tag.name, tag_url=tag.permalink, tag_size=str(len(tag.posts)) + ' ' + ('Articles' if post_count > 1 else 'Article')))
         index = template[:tags_match.start()] + ''.join(tag_list) + template[tags_match.end():]
         output_dir = os.path.join(site_dir, 'tags')
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
         output_file_path = os.path.join(output_dir, 'index.html')
         with codecs.open(output_file_path, 'w', 'utf-8') as output_file:
-            output_file.write(index)    
-
+            output_file.write(index)
 
     def create_tag_index(tag):
         index = tag.build_index(templates_dir)
@@ -556,7 +561,7 @@ def main():
         output_file_path = os.path.join(output_dir, 'index.html')
         with codecs.open(output_file_path, 'w', 'utf-8') as output_file:
             output_file.write(index)
-                
+
     def create_timeline_archives(posts):
         global timeline_archives
         del timeline_archives[:]
@@ -568,8 +573,8 @@ def main():
             archive_list.append(archive)
         archive_list.append(None)
         for next_archive, archive, prev_archive in triplepwise(archive_list):
-            create_timeline_index(archive, prev_archive, next_archive)        
-        
+            create_timeline_index(archive, prev_archive, next_archive)
+
     def create_timeline_index(archive, prev_archive, next_archive):
         index = archive.build_index(templates_dir, prev_archive, next_archive)
         output_dir = os.path.join(site_dir, archive.path)
@@ -613,7 +618,7 @@ def main():
         output_file_path = os.path.join(output_dir, 'index.html')
         with codecs.open(output_file_path, 'w', 'utf-8') as output_file:
             output_file.write(index)
-                
+
     def create_yearly_archives(monthly_archives):
         global yearly_archives
         yearly_archives.clear()
@@ -659,7 +664,7 @@ def main():
         post_template = posts_match.group(1)
         monthly_archive_footer = monthly_archive_template[posts_match.end():]
         monthly_archive_list = []
-        for monthly_archive in sorted(monthly_archives.values(), reverse=True):            
+        for monthly_archive in sorted(monthly_archives.values(), reverse=True):
             post_list = []
             for post in reversed(monthly_archive.posts):
                 post_list.append(format(post_template, title=post.title, date=post.date.strftime('%Y-%m-%d'), pretty_date=post.pretty_date, permalink=post.permalink, excerpt=post.excerpt))
@@ -670,8 +675,8 @@ def main():
             os.makedirs(output_dir)
         output_file_path = os.path.join(output_dir, 'index.html')
         with codecs.open(output_file_path, 'w', 'utf-8') as output_file:
-            output_file.write(index)    
-                
+            output_file.write(index)
+
     def build_site():
         logger.info('Build site')
         global posts
@@ -737,7 +742,8 @@ def main():
                         if event.mask & file_create_mask:
                             # New post or post changed.
                             post = create_post(event.pathname)
-                            if not post: return
+                            if not post:
+                                return
                             if post.file_path in posts:
                                 logger.info('Update post: %s', os.path.basename(event.pathname))
                             else:
@@ -778,7 +784,7 @@ def main():
                                     dst = os.path.join(site_dir, last_timeline_archive.path)
                                     if os.path.exists(dst):
                                         shutil.rmtree(dst, ignore_errors=True)
-                                        
+
                                 monthly_archive = monthly_archives.get(datetime.date(post.date.year, post.date.month, 1))
                                 if monthly_archive:
                                     try:
@@ -832,18 +838,18 @@ def main():
                     try:
                         shutil.copytree(event.pathname, dst)
                     except Exception as e:
-                        logger.error(e)                        
+                        logger.error(e)
                 elif event.mask & delete_mask:
                     logger.info('Delete resource dir: %s', rel_path)
                     if os.path.exists(dst):
-                        shutil.rmtree(dst, ignore_errors=True)                
+                        shutil.rmtree(dst, ignore_errors=True)
             else:
                 if event.mask & file_create_mask:
                     logger.info('New resource file: %s', rel_path)
                     try:
                         shutil.copyfile(event.pathname, dst)
                     except Exception as e:
-                        logger.error(e)                        
+                        logger.error(e)
                 elif event.mask & delete_mask:
                     logger.info('Delete resource file: %s', rel_path)
                     if os.path.exists(dst):
@@ -851,7 +857,7 @@ def main():
                             os.remove(dst)
                         except:
                             logger.exception('Can not delete %s', dst)
-            
+
     wm = pyinotify.WatchManager()
     mask = pyinotify.ALL_EVENTS
     notifier = pyinotify.Notifier(wm)
@@ -859,6 +865,5 @@ def main():
     notifier.loop()
 
 
-    
 if __name__ == "__main__":
     sys.exit(main())
