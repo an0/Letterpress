@@ -217,7 +217,7 @@ class Tag(object):
         header_template = template[:posts_match.start()]
         header = format(header_template, archive_title=self.name)
         post_list = []
-        for post in self.posts:
+        for post in sorted(self.posts, reverse=True):
             if not post:
                 break
             post_list.append(format(post_template, title=post.title, date=post.date.strftime('%Y-%m-%d'), pretty_date=post.pretty_date, permalink=post.permalink, excerpt=post.excerpt))
