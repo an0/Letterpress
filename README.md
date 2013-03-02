@@ -97,3 +97,6 @@ You can publish posts by putting them in *press_folder* with whatever method you
 * [MathJax](http://www.mathjax.org) for [ASCIIMathML](http://www1.chapman.edu/~jipsen/mathml/asciimath.html) processing and [MathML](http://www.mathjax.org) rendering.
 
 So I hardly did any thing but glue these awesome things together.
+
+# License
+Letterpress is licensed under a BSD-3-clause license. See [LICENSE](https://github.com/an0/Letterpress/blob/master/LICENSE) for details. You are encouraged to keep the "Powered by Letterpress" footer on your site.
