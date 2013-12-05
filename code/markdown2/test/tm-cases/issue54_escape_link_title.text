@@ -1,0 +1,12 @@
+[foo](http://example.com "lorem [ipsum] dolor <sit> amet")
+
+![fooimg](http://example.com/foo.gif "lorem [ipsum] dolor <sit> amet")
+
+!["this" [is] my <alt> text](http://example.com/foo.gif "lorem [ipsum] dolor <sit> amet")
+
+[bar][id]
+
+![barimg][idimg]
+
+[id]: http://example.com "lorem [ipsum] dolor <sit> amet"
+[idimg]: http://example.com/bar.png "lorem [ipsum] dolor <sit> amet"

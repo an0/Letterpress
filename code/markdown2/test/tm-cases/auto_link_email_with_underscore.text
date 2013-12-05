@@ -1,0 +1,7 @@
+Auto-link email with underscores failed at one point:
+- <foo_bar@example.com>
+- <foo@_example.com>
+- <foo@an_example.com>
+- <foo@_example_.com>
+- <nounderscore@example.com>
+- <check_this_out@coolpeople.com>

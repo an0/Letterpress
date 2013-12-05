@@ -1,0 +1,11 @@
+include README.txt
+include TODO.txt
+include LICENSE.txt
+include CONTRIBUTORS.txt
+include CHANGES.md
+include Makefile
+include setup.py
+
+include bin/markdown2
+include test/api.doctests
+recursive-include test/tm-cases *.text *.html *.opts *.tags
