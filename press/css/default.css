@@ -21,7 +21,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 
 body{
   font-family: "PT Serif", Georgia, Times, "Times New Roman", "Songti SC", serif;
-  font-size: 100%;
+  font-size: 95%;
   line-height: 1.6;
   vertical-align: baseline;
   color: #18191a;
@@ -206,7 +206,7 @@ article header{
   margin-bottom: 16px;
 }
 article header h1{
-  font-size: 2.4em;
+  font-size: 2.0em;
 }
 article header p.meta{
   font-family: "Open Sans", Futura, "Helvetica Neue", Helvetica, "Lantinghei SC", "Kaiti SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
@@ -241,6 +241,7 @@ article .content h5{
   margin: 30px 0 20px;
 }
 article .content p{
+  margin-top: 20px;
   margin-bottom: 20px;
 }
 article .content img,
@@ -383,6 +384,7 @@ footer#footer p{
 /* Code
  *************************************/
 div.code {
+  font-size: .85em;
 	margin-bottom: 20px;
 	padding: 10px;
 	overflow: auto;
