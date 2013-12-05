@@ -110,10 +110,10 @@ class Post(object):
         base_name = os.path.splitext(os.path.basename(file_path))[0]
         self.path = '{year:04}/{month:02}/{base_name}.html'.format(year=self.date.year, month=self.date.month, base_name=base_name.lower().replace(' ', '-'))
         self.permalink = os.path.join(base_url, self.path)
-        with open(os.path.join(templates_dir, "post.html")) as f:
+        with codecs.open(os.path.join(templates_dir, "post.html"), 'r', 'utf-8') as f:
             template = f.read()
-        content = markdown2.markdown(rest_text, extras={'fenced-code-blocks': pygments_options, 'footnotes': True, 'math_delimiter': math_delimiter if is_math else None})
-        # Process user written <code lang="programming-lang"></code> blocks or spans.
+        content = markdown2.markdown(rest_text, extras={'code-friendly': True, 'fenced-code-blocks': pygments_options, 'footnotes': True, 'math_delimiter': math_delimiter if is_math else None})
+        # Process <code lang="programming-lang"></code> blocks or spans.
         content = self._format_code_lang(content)
         self.html = format(template, title=self.title, date=self.date.strftime('%Y-%m-%d'), monthly_archive_url=os.path.dirname(self.permalink) + '/', year=self.date.strftime('%Y'), month=self.date.strftime('%B'), day=self.date.strftime('%d'), tags=', '.join('<a href="/tags/{tag}">{tag}</a>'.format(tag=tag) for tag in self.tags), permalink=self.permalink, excerpt=self.excerpt, content=content)
         # Load MathJax for post with math tag.
@@ -210,7 +210,7 @@ class Tag(object):
         self.permalink = urllib.parse.urlunparse(url_comps[:2] + (self.path,) + (None,) * 3)
 
     def build_index(self, templates_dir):
-        with open(os.path.join(templates_dir, "tag_archive.html")) as f:
+        with codecs.open(os.path.join(templates_dir, "tag_archive.html"), 'r', 'utf-8') as f:
             template = f.read()
         posts_match = _posts_re.search(template)
         post_template = posts_match.group(1)
@@ -251,7 +251,7 @@ class MonthlyArchive(object):
         self.permalink = os.path.dirname(posts[0].permalink) + '/'
 
     def build_index(self, templates_dir, prev_archive=None, next_archive=None):
-        with open(os.path.join(templates_dir, "monthly_archive.html")) as f:
+        with codecs.open(os.path.join(templates_dir, "monthly_archive.html"), 'r', 'utf-8') as f:
             template = f.read()
         posts_match = _posts_re.search(template)
         header_template = template[:posts_match.start()]
@@ -300,7 +300,7 @@ class YearlyArchive(object):
         self.permalink = os.path.dirname(monthly_archives[0].permalink[:-1]) + '/'
 
     def build_index(self, templates_dir, prev_archive=None, next_archive=None):
-        with open(os.path.join(templates_dir, "yearly_archive.html")) as f:
+        with codecs.open(os.path.join(templates_dir, "yearly_archive.html"), 'r', 'utf-8') as f:
             template = f.read()
         monthly_archives_match = _monthly_archives_re.search(template)
         header_template = template[:monthly_archives_match.start()]
@@ -357,7 +357,7 @@ class TimelineArchive(object):
         self.permalink = urllib.parse.urlunparse(url_comps[:2] + (self.path,) + (None,) * 3)
 
     def build_index(self, templates_dir, prev_archive=None, next_archive=None):
-        with open(os.path.join(templates_dir, "index.html")) as f:
+        with codecs.open(os.path.join(templates_dir, "index.html"), 'r', 'utf-8') as f:
             template = f.read()
         posts_match = _posts_re.search(template)
         footer_template = template[posts_match.end():]
@@ -480,7 +480,7 @@ def main():
 
     # Letterpress config file parsing.
     config = {'markdown_ext': '.md'}
-    with open(os.path.join(published_dir, 'letterpress.config')) as config_file:
+    with codecs.open(os.path.join(published_dir, 'letterpress.config'), 'r', 'utf-8') as config_file:
         for line in config_file.readlines():
             line = line.strip()
             if len(line) == 0 or line.startswith('#'):
@@ -537,7 +537,7 @@ def main():
             tags[tag_name] = tag
             create_tag_index(tag)
 
-        with open(os.path.join(templates_dir, "tags.html")) as f:
+        with codecs.open(os.path.join(templates_dir, "tags.html"), 'r', 'utf-8') as f:
             template = f.read()
         tags_match = _tags_re.search(template)
         tags_template = tags_match.group(1)
@@ -655,7 +655,7 @@ def main():
             output_file.write(index)
 
     def create_complete_archive(monthly_archives):
-        with open(os.path.join(templates_dir, "archive.html")) as f:
+        with codecs.open(os.path.join(templates_dir, "archive.html"), 'r', 'utf-8') as f:
             template = f.read()
         monthly_archives_match = _monthly_archives_re.search(template)
         monthly_archive_template = monthly_archives_match.group(1)
