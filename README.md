@@ -20,7 +20,7 @@ Letterpress is a minimal, [Markdown](http://daringfireball.net/projects/markdown
 	pip install pyinotify
 	```
 2. Copy `code/letterpress.py` to your Python runtime path. 
-3. Copy [my fork of python-markdown2](https://raw.github.com/an0/python-markdown2/master/lib/markdown2.py) to your Python runtime path.
+3. Copy `code/markdown2/lib/markdown2.py` to your Python runtime path.
 4. Make a directory to hold your posts — let's call it *press_folder* — and copy `press/*` to it.
 5. Make the necessary changes to the templates(title, twitter handle…) and `letterpress.config`.
 6. Install [Pygments](http://pygments.org) if you want to embed code(using [GFM](http://github.github.com/github-flavored-markdown/)'s Syntax Highlighting) in your posts.
