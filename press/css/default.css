@@ -260,11 +260,6 @@ article .content ul,
 article .content ol{
   margin: 0 0 20px 40px;
 }
-article .content p code{
-  font-size: .85em;
-	overflow-wrap: break-word;
-	word-wrap: break-word;;
-}
 article .content .intro{
   margin-top: 0;
 }
@@ -383,8 +378,12 @@ footer#footer p{
 
 /* Code
  *************************************/
-div.code {
+article .content code {
   font-size: .85em;
+ 	overflow-wrap: break-word;
+ 	word-wrap: break-word;;
+}
+article .content div.code {
 	margin-bottom: 20px;
 	padding: 10px;
 	overflow: auto;

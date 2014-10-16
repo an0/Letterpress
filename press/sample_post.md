@@ -2,6 +2,7 @@ title: Letterpress
 date: 01/31/2013
 excerpt: Letterpress is a minimal, Markdown based blogging system written in Python.
 tags: math, web
+lang: English
 
 *This is a sample post to demonstrate how to write a post in Letterpress. You can see the rendered result [here](http://wangling.me/2013/01/letterpress.html).*
 

@@ -107,10 +107,15 @@ class Post(object):
                 self.tags.append(tag_name)
                 if tag_name.lower() == 'math':
                     is_math = True
+        self.lang = meta_data.get('lang')
+        if self.lang == 'Chinese' or self.lang == '中文':
+            template_file_name = 'post_zh.html'
+        else:
+            template_file_name = 'post.html'
         base_name = os.path.splitext(os.path.basename(file_path))[0]
         self.path = '{year:04}/{month:02}/{base_name}.html'.format(year=self.date.year, month=self.date.month, base_name=base_name.lower().replace(' ', '-'))
         self.permalink = os.path.join(base_url, self.path)
-        with codecs.open(os.path.join(templates_dir, "post.html"), 'r', 'utf-8') as f:
+        with codecs.open(os.path.join(templates_dir, template_file_name), 'r', 'utf-8') as f:
             template = f.read()
         content = markdown2.markdown(rest_text, extras={'code-friendly': True, 'fenced-code-blocks': pygments_options, 'footnotes': True, 'math_delimiter': math_delimiter if is_math else None})
         # Process <code lang="programming-lang"></code> blocks or spans.

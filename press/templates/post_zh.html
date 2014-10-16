@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:wb="http://open.weibo.com/wb">
 <head>
   <title>Wangling - {{title}}</title>
 	
@@ -36,8 +36,7 @@
 	    <footer role="contentinfo" class="post-foot">
 	      <section class="post-foot-top">
 	 		    <p class="meta" id="tags">{{tags}}</p>
-	        <a href="https://twitter.com/share" class="twitter-share-button" data-text="{{title}} by @an0: {{excerpt}}">Tweet</a>
-	        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+	        <wb:share-button addition="number" type="button" ralateUid="1676354212" picture_search="false" title="{{title}}：{{excerpt}}"></wb:share-button>
 	      </section>
 	      <section class="bio">
 	        <a class="author-image" href="/"><img src="/img/me.jpg" alt="Me" /></a>
@@ -65,6 +64,6 @@
     </section>
   </footer>
 
-  <script src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+  <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js" charset="utf-8"></script>
 </body>
 </html>
