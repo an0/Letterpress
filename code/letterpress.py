@@ -711,12 +711,12 @@ def main():
                     try:
                         shutil.copytree(path, dst)
                     except Exception as e:
-                        logger.error(e)
+                        logger.exception('Can not copytree')
                 else:
                     try:
                         shutil.copyfile(path, dst)
                     except Exception as e:
-                        logger.error(e)
+                        logger.exception('Can not copyfile')
         create_tags(posts)
         create_timeline_archives(posts)
         create_monthly_archives(posts)
@@ -843,7 +843,7 @@ def main():
                     try:
                         shutil.copytree(event.pathname, dst)
                     except Exception as e:
-                        logger.error(e)
+                        logger.exception('Can not copytree')
                 elif event.mask & delete_mask:
                     logger.info('Delete resource dir: %s', rel_path)
                     if os.path.exists(dst):
@@ -854,7 +854,7 @@ def main():
                     try:
                         shutil.copyfile(event.pathname, dst)
                     except Exception as e:
-                        logger.error(e)
+                        logger.exception('Can not copyfile')
                 elif event.mask & delete_mask:
                     logger.info('Delete resource file: %s', rel_path)
                     if os.path.exists(dst):
