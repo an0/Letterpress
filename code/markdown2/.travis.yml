@@ -1,11 +1,10 @@
 language: python
 python:
-  - "2.5"
   - "2.6"
   - "2.7"
   - "pypy"
   - "3.2"
 # command to install dependencies
-install: pip install --use-mirrors pygments
+install: pip install --use-mirrors Pygments==1.6
 # command to run tests
 script: make testone

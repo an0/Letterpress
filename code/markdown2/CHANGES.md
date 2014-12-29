@@ -1,8 +1,60 @@
 # python-markdown2 Changelog
 
-## python-markdown2 2.1.1 (not yet released)
+## python-markdown2 2.3.1 (not yet released)
 
-(nothing yet)
+- [pull #131] Markdown "spoiler" extra
+- [pull #170] html-classes support for table tags
+
+
+## python-markdown2 2.3.0
+
+- New "tables" extra for table syntax that matches GFM
+  <https://help.github.com/articles/github-flavored-markdown#tables> and
+  PHP-Markdown Extra <https://michelf.ca/projects/php-markdown/extra/#table>.
+  For example:
+
+        | Header 1 | *Header* 2 |
+        | -------- | -------- |
+        | `Cell 1` | [Cell 2](http://example.com) link |
+        | Cell 3   | **Cell 4** |
+
+  See <https://github.com/trentm/python-markdown2/blob/master/test/tm-cases/tables.text>
+  for examples and edge cases.
+
+  If you have documents using the 'wiki-tables' syntax and want to convert to the
+  'tables' syntax, there is a script to help with that here:
+  <https://github.com/trentm/python-markdown2/blob/master/tools/wiki-tables-to-tables.py>
+
+
+## python-markdown2 2.2.3
+
+- [issue #165] Fix an edge case in list parsing.
+
+
+## python-markdown2 2.2.2
+
+- [pull #156] Footnotes XML compatibility.
+- [pull #157] Horizontal rule minimum length.
+- [pull #162] Fix escaping fenced code block with safe mode
+- [pull #163] Fix code highlight with safe mode
+
+
+## python-markdown2 2.2.1
+
+- [issue #142 pull #141] Fix parentheses and spaces in urls.
+- [issue #88 issue #95 pull #145] Fix code blocks in code blocks with syntax highlighting.
+- [issue #113 issue #127 via pull #144] Fix fenced-code-blocks html and code output.
+- [pull #133] Unify the -/= and ## style headers and fix TOC order
+- [pull #146] tag-friendly extra to require that atx headers have a space after #
+
+
+## python-markdown2 2.2.0
+
+- [issue #135] Fix fenced code blocks odd rendering.
+- [pull #138] specify shell in Makefile
+- [pull #130] break-on-newline extra
+- [pull #140] Allow html-classes for img
+- [pull #122] Allow parentheses in urls
 
 
 ## python-markdown2 2.1.0
