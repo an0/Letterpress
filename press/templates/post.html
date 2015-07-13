@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="robots" content="index, follow">
   <meta name="description" content="Ling Wang's blog." />
-  <meta name="keywords" content="Moke, Voodo, iOS, iPhone, iPad, app, OS X, Mac, Apple" />
+  <meta name="keywords" content="Moke, Tweeet, Voodo, iOS, iPhone, iPad, app, OS X, Mac, Apple" />
   <meta name="author" content="Ling Wang" />
 
 	<link rel="shortcut icon" href="/favicon.png" />
@@ -37,12 +37,14 @@
 	      <section class="post-foot-top">
 	 		    <p class="meta" id="tags">{{tags}}</p>
 	        <a href="https://twitter.com/share" class="twitter-share-button" data-text="{{title}} by @an0: {{excerpt}}">Tweet</a>
-	        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+					<script>
+window.twttr=(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],t=window.twttr||{};if(d.getElementById(id))return;js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);t._e=[];t.ready=function(f){t._e.push(f);};return t;}(document,"script","twitter-wjs"));
+</script>
 	      </section>
 	      <section class="bio">
 	        <a class="author-image" href="/"><img src="/img/me.jpg" alt="Me" /></a>
 	        <h5><a class="author-name" href="/">Wang Ling</a></h5>
-	        <p>I'm Ling Wang, iOS developer, creator of <a href="http://moke.com/moke">Moke</a> and <a href="http://iwonderphone.com">Voodo</a>.</p>
+	        <p>I'm Ling Wang, iOS developer, creator of <a href="http://moke.com/moke">Moke</a>, <a href="http://moke.com/tweeet">Tweeet</a>, and <a href="http://moke.com/voodo">Voodo</a>.</p>
 	        <ul>
 	          <li>
 	            <a href="http://twitter.com/an0">Twitter</a>
@@ -64,7 +66,5 @@
       <p>Powered by <a href="https://github.com/an0/Letterpress">Letterpress</a>.</p>
     </section>
   </footer>
-
-  <script src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 </body>
 </html>
