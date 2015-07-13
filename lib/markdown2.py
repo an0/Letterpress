@@ -810,7 +810,8 @@ class Markdown(object):
 
             main text(^inline footnote)
         """
-        _inline_footnote_re = re.compile(r'\(\^(.+?)\)')
+        # Need handle inline links: []()
+        _inline_footnote_re = re.compile(r'\(\^([^()]*?(?:(?:\([^()]*?\))*?[^()]*?)*?)\)')
         return _inline_footnote_re.sub(self._extract_inline_footnote_sub, text)
 
     _hr_re = re.compile(r'^[ ]{0,3}([-_*][ ]{0,2}){3,}$', re.M)
