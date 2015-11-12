@@ -25,6 +25,8 @@ import urllib.parse
 import shutil
 import itertools
 import pyinotify
+import email.utils
+import html
 
 #--- globals ---
 logger = logging.getLogger('Letterpress')
@@ -86,9 +88,7 @@ class Post(object):
         rest_text = self.rest_text
         del self.rest_text
         self.file_path = file_path
-        self.title = meta_data['title']
-        self.title = self.title.replace('"', '&quot;')
-        self.title = self.title.replace("'", "&#39;")
+        self.title = html.escape(meta_data['title'])
         self.date = datetime.datetime.strptime(meta_data['date'], date_format)
         self.pretty_date = self.date.strftime('%B %d, %Y')
         self.excerpt = meta_data.get('excerpt')
@@ -97,8 +97,7 @@ class Post(object):
                 self.excerpt = rest_text[:140] + '…'
             else:
                 self.excerpt = rest_text
-        self.excerpt = self.excerpt.replace('"', '&quot;')
-        self.excerpt = self.excerpt.replace("'", "&#39;")
+        self.excerpt = html.escape(self.excerpt)
         self.tags = []
         is_math = False
         for tag_name in meta_data.get('tags', '').split(','):
@@ -117,10 +116,10 @@ class Post(object):
         self.permalink = os.path.join(base_url, self.path)
         with codecs.open(os.path.join(templates_dir, template_file_name), 'r', 'utf-8') as f:
             template = f.read()
-        content = markdown2.markdown(rest_text, extras={'code-friendly': True, 'fenced-code-blocks': pygments_options, 'footnotes': True, 'math_delimiter': math_delimiter if is_math else None})
+        self.content = markdown2.markdown(rest_text, extras={'code-friendly': True, 'fenced-code-blocks': pygments_options, 'footnotes': True, 'math_delimiter': math_delimiter if is_math else None})
         # Process <code lang="programming-lang"></code> blocks or spans.
-        content = self._format_code_lang(content)
-        self.html = format(template, title=self.title, date=self.date.strftime('%Y-%m-%d'), monthly_archive_url=os.path.dirname(self.permalink) + '/', year=self.date.strftime('%Y'), month=self.date.strftime('%B'), day=self.date.strftime('%d'), tags=', '.join('<a href="/tags/{tag}">{tag}</a>'.format(tag=tag) for tag in self.tags), permalink=self.permalink, excerpt=self.excerpt, content=content)
+        self.content = self._format_code_lang(self.content)
+        self.html = format(template, site_title=config["title"], title=self.title, date=self.date.strftime('%Y-%m-%d'), monthly_archive_url=os.path.dirname(self.permalink) + '/', year=self.date.strftime('%Y'), month=self.date.strftime('%B'), day=self.date.strftime('%d'), tags=', '.join('<a href="/tags/{tag}">{tag}</a>'.format(tag=tag) for tag in self.tags), permalink=self.permalink, excerpt=self.excerpt, content=self.content)
         # Load MathJax for post with math tag.
         if is_math:
             self.html = self.html.replace('</head>', '''
@@ -220,7 +219,7 @@ class Tag(object):
         posts_match = _posts_re.search(template)
         post_template = posts_match.group(1)
         header_template = template[:posts_match.start()]
-        header = format(header_template, archive_title=self.name)
+        header = format(header_template, site_title=config["title"], archive_title=self.name)
         post_list = []
         for post in sorted(self.posts, reverse=True):
             if not post:
@@ -270,7 +269,7 @@ class MonthlyArchive(object):
         if next_archive:
             next_archive_title = '>'
             next_archive_url = next_archive.permalink
-        header = format(header_template, archive_title=self.month.strftime('%B, %Y'), prev_archive_title=prev_archive_title, prev_archive_url=prev_archive_url, next_archive_title=next_archive_title, next_archive_url=next_archive_url, month=self.month.strftime('%B'), year=self.month.strftime('%Y'), yearly_archive_url=os.path.dirname(self.permalink[:-1]) + '/')
+        header = format(header_template, site_title=config["title"], archive_title=self.month.strftime('%B, %Y'), prev_archive_title=prev_archive_title, prev_archive_url=prev_archive_url, next_archive_title=next_archive_title, next_archive_url=next_archive_url, month=self.month.strftime('%B'), year=self.month.strftime('%Y'), yearly_archive_url=os.path.dirname(self.permalink[:-1]) + '/')
         post_template = posts_match.group(1)
         post_list = []
         for post in self.posts:
@@ -319,7 +318,7 @@ class YearlyArchive(object):
         if next_archive:
             next_archive_title = '>'
             next_archive_url = next_archive.permalink
-        header = format(header_template, archive_title=self.year.strftime('%Y'), prev_archive_title=prev_archive_title, prev_archive_url=prev_archive_url, next_archive_title=next_archive_title, next_archive_url=next_archive_url)
+        header = format(header_template, site_title=config["title"], archive_title=self.year.strftime('%Y'), prev_archive_title=prev_archive_title, prev_archive_url=prev_archive_url, next_archive_title=next_archive_title, next_archive_url=next_archive_url)
         monthly_archive_template = monthly_archives_match.group(1)
         posts_match = _posts_re.search(monthly_archive_template)
         monthly_archive_header = monthly_archive_template[:posts_match.start()]
@@ -365,6 +364,8 @@ class TimelineArchive(object):
         with codecs.open(os.path.join(templates_dir, "index.html"), 'r', 'utf-8') as f:
             template = f.read()
         posts_match = _posts_re.search(template)
+        header_template = template[:posts_match.start()]
+        header = format(header_template, site_description=config["description"])
         footer_template = template[posts_match.end():]
         prev_archive_title = ''
         prev_archive_url = ''
@@ -383,7 +384,7 @@ class TimelineArchive(object):
             if not post:
                 break
             post_list.append(format(post_template, title=post.title, date=post.date.strftime('%Y-%m-%d'), pretty_date=post.pretty_date, permalink=post.permalink, excerpt=post.excerpt))
-        index = template[:posts_match.start()] + ''.join(post_list) + footer
+        index = header + ''.join(post_list) + footer
         return index
 
     def __str__(self):
@@ -414,7 +415,7 @@ class Struct(object):
 _posts_re = re.compile(r'{{#posts}}(.*){{/posts}}', re.S)
 _tags_re = re.compile(r'{{#tags}}(.*){{/tags}}', re.S)
 _monthly_archives_re = re.compile(r'{{#monthly_archives}}(.*){{/monthly_archives}}', re.S)
-
+_items_re = re.compile(r'{{#items}}(.*){{/items}}', re.S)
 
 def triplepwise(iterable):
     "s -> (s0,s1,s2, (s1,s2,s3), (s2,s3,s4), ..."
@@ -440,6 +441,8 @@ tags = {}
 
 
 def main():
+    global published_dir
+    
     # Command line arguments parsing
     cmdln_desc = 'A markdown based blog system.'
     if argparse:
@@ -484,16 +487,20 @@ def main():
     logger.addHandler(file_handler)
 
     # Letterpress config file parsing.
-    config = {'markdown_ext': '.md'}
-    with codecs.open(os.path.join(published_dir, 'letterpress.config'), 'r', 'utf-8') as config_file:
-        for line in config_file.readlines():
-            line = line.strip()
-            if len(line) == 0 or line.startswith('#'):
-                continue
-            key, value = line.split(':', 1)
-            config[key.strip()] = value.strip()
-    logger.info('Site configure: %s', config)
+    def read_config():
+        global config
+        config = {'markdown_ext': '.md'}
+        with codecs.open(os.path.join(published_dir, 'letterpress.config'), 'r', 'utf-8') as config_file:
+            for line in config_file.readlines():
+                line = line.strip()
+                if len(line) == 0 or line.startswith('#'):
+                    continue
+                key, value = line.split(':', 1)
+                config[key.strip()] = value.strip()
+        logger.info('Site configure: %s', config)
 
+    read_config()
+    
     site_dir = config['site_dir']
     if not os.path.isabs(site_dir):
         site_dir = os.path.join(published_dir, os.path.expanduser(site_dir))
@@ -545,12 +552,14 @@ def main():
         with codecs.open(os.path.join(templates_dir, "tags.html"), 'r', 'utf-8') as f:
             template = f.read()
         tags_match = _tags_re.search(template)
+        header_template = template[:tags_match.start()]
+        header = format(header_template, site_title=config["title"])
         tags_template = tags_match.group(1)
         tag_list = []
         for tag in sorted(tags.values()):
             post_count = len(tag.posts)
             tag_list.append(format(tags_template, tag_title=tag.name, tag_url=tag.permalink, tag_size=str(len(tag.posts)) + ' ' + ('Articles' if post_count > 1 else 'Article')))
-        index = template[:tags_match.start()] + ''.join(tag_list) + template[tags_match.end():]
+        index = header + ''.join(tag_list) + template[tags_match.end():]
         output_dir = os.path.join(site_dir, 'tags')
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
@@ -663,6 +672,8 @@ def main():
         with codecs.open(os.path.join(templates_dir, "archive.html"), 'r', 'utf-8') as f:
             template = f.read()
         monthly_archives_match = _monthly_archives_re.search(template)
+        header_template = template[:monthly_archives_match.start()]
+        header = format(header_template, site_title=config["title"])
         monthly_archive_template = monthly_archives_match.group(1)
         posts_match = _posts_re.search(monthly_archive_template)
         monthly_archive_header = monthly_archive_template[:posts_match.start()]
@@ -674,7 +685,7 @@ def main():
             for post in reversed(monthly_archive.posts):
                 post_list.append(format(post_template, title=post.title, date=post.date.strftime('%Y-%m-%d'), pretty_date=post.pretty_date, permalink=post.permalink, excerpt=post.excerpt))
             monthly_archive_list.append(format(monthly_archive_header, monthly_archive_title=monthly_archive.month.strftime('%B, %Y'), monthly_archive_url=monthly_archive.permalink) + ''.join(post_list) + monthly_archive_footer)
-        index = template[:monthly_archives_match.start()] + ''.join(monthly_archive_list) + template[monthly_archives_match.end():]
+        index = header + ''.join(monthly_archive_list) + template[monthly_archives_match.end():]
         output_dir = os.path.join(site_dir, 'archive')
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
@@ -682,6 +693,23 @@ def main():
         with codecs.open(output_file_path, 'w', 'utf-8') as output_file:
             output_file.write(index)
 
+    def create_rss_feed(posts):
+        with codecs.open(os.path.join(templates_dir, "feed.xml"), 'r', 'utf-8') as f:
+            template = f.read()
+        items_match = _items_re.search(template)
+        item_template = items_match.group(1)
+        item_list = []
+        
+        sorted_posts = sorted(posts.values(), reverse=True)
+        for post in sorted_posts:
+            item_list.append(format(item_template, title=post.title, date=email.utils.format_datetime(post.date), permalink=post.permalink, content=post.content))
+        feed = format(template[:items_match.start()], site_title=html.escape(config["title"]), site_description=html.escape(config["description"]), site_link=config["base_url"]) + ''.join(item_list) + template[items_match.end():]
+
+        output_file_path = os.path.join(site_dir, 'feed.xml')
+        with codecs.open(output_file_path, 'w', 'utf-8') as output_file:
+            output_file.write(feed)
+
+            
     def build_site():
         logger.info('Build site')
         global posts
@@ -722,6 +750,7 @@ def main():
         create_monthly_archives(posts)
         create_yearly_archives(monthly_archives)
         create_complete_archive(monthly_archives)
+        create_rss_feed(posts)
 
     build_site()
 
@@ -741,6 +770,7 @@ def main():
                         # Configure file changed. Rebuild the whole site.
                         if event.mask & file_create_mask:
                             logger.info('New site configure')
+                            read_config()
                             build_site()
                         return
                     elif os.path.splitext(event.pathname)[1] == config['markdown_ext']:
@@ -759,6 +789,7 @@ def main():
                             create_monthly_archives(posts)
                             create_yearly_archives(monthly_archives)
                             create_complete_archive(monthly_archives)
+                            create_rss_feed(posts)
                         elif event.mask & delete_mask:
                             # Delete post.
                             logger.info('Delete post: %s', os.path.basename(event.pathname))
@@ -820,10 +851,11 @@ def main():
                                 create_monthly_archives(posts)
                                 create_yearly_archives(monthly_archives)
                                 create_complete_archive(monthly_archives)
+                                create_rss_feed(posts)
                         return
             elif path == templates_dir:
                 # Template changed. Rebuild the whole site.
-                if event.mask & file_create_mask and os.path.splitext(event.pathname)[1] == '.html':
+                if event.mask & file_create_mask:
                     logger.info('Update template: %s', os.path.basename(event.pathname))
                     build_site()
                 return
@@ -868,7 +900,6 @@ def main():
     notifier = pyinotify.Notifier(wm)
     wm.add_watch(published_dir, mask, proc_fun=ResourceChangeHandler(), rec=True, auto_add=True)
     notifier.loop()
-
 
 if __name__ == "__main__":
     sys.exit(main())
