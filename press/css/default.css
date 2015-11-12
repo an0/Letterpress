@@ -4,10 +4,6 @@ Handwritten by Michiel de Graaf.
 
 */
 
-@import url(http://fonts.googleapis.com/css?family=PT+Serif:400,700,400italic,700italic);
-@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic,700italic);
-@import url(http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700);
-
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, dialog{
   display: block;
 }
@@ -20,13 +16,16 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
  *************************************/
 
 body{
-  font-family: "PT Serif", Georgia, Times, "Times New Roman", "Songti SC", serif;
+  font-family: -apple-system, Verdana, Helvetica Neue, Microsoft Yahei, Hiragino Sans GB, Microsoft Sans Serif, WenQuanYi Micro Hei, sans-serif;
   font-size: 95%;
   line-height: 1.6;
   vertical-align: baseline;
   color: #18191a;
   background: #fff;
   -webkit-font-smoothing: antialiased;
+}
+.serif {
+  font-family: Palatino, Optima, Georgia, serif;
 }
 a{
   cursor: pointer;
@@ -38,7 +37,6 @@ a:hover{
   border-bottom: 1px solid rgba(184,23,35,0.5);
 }
 h1,h2,h3,h4{
-  font-family: "Source Sans Pro", Futura, "Helvetica Neue", Helvetica, "Lantinghei SC", "Kaiti SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
 	line-height: 1.2;
 }
 h1 a, h2 a, h3 a, h4 a{
@@ -57,7 +55,7 @@ p.meta a:hover{
   border-bottom: 1px solid rgba(164,171,178,0.5);
 }
 code{
-  font-family: Menlo, Monaco, Consolas, "Source Code Pro", monospace;
+  font-family: Menlo, Monaco, Consolas, Courier, Courier New, monospace;
 }
 .container{
   overflow: hidden;
@@ -94,7 +92,6 @@ a.logo{
 .about{
 	display: block;
   margin-top: 20px;
-  font-family: "Source Sans Pro", Futura, "Helvetica Neue", Helvetica, "Lantinghei SC", "Kaiti SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   font-size: 1.125em;
   font-weight: normal;
   line-height: 1.4;
@@ -209,7 +206,6 @@ article header h1{
   font-size: 2.0em;
 }
 article header p.meta{
-  font-family: "Open Sans", Futura, "Helvetica Neue", Helvetica, "Lantinghei SC", "Kaiti SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
 	font-size: .75em;
 	font-weight: 500;
 	letter-spacing: .2em;
@@ -264,7 +260,6 @@ article .content .intro{
   margin-top: 0;
 }
 article .content blockquote{
-	  font-family: "PT Serif", Georgia, Times, "Times New Roman", "STFangsong", serif;
 	  padding-left: 10px;
 	  border-left: 2px solid #ccc;
 }
