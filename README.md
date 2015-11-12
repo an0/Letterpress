@@ -10,23 +10,16 @@ Letterpress is a minimal, [Markdown](http://daringfireball.net/projects/markdown
 
 # Requirements
 1. A Linux kernel with inotify support is required to run Letterpress.
-2. Python 3 is assumed. I want to contribute to the acceleration of the transition from Python 2 to Python 3. I didn't test with Python 2.
-3. [virtualenv](http://www.virtualenv.org) and [pip](http://www.pip-installer.org) are recommended.
-4. UTF-8 is assumed. The babel of human languages is bad enough, let's at least use the same encoding.
+2. Requires Python 3. I want to contribute to the acceleration of the transition from Python 2 to Python 3.
+3. UTF-8 is assumed. The babel of human languages is bad enough, let's at least use the same encoding.
 
 # Installation
 1. Install [pyinotify](https://github.com/seb-m/pyinotify).
-	```bash
-	pip install pyinotify
-	```
 2. Copy `code/letterpress.py` to your Python runtime path. 
 3. Copy `code/markdown2/lib/markdown2.py` to your Python runtime path.
 4. Make a directory to hold your posts — let's call it *press_folder* — and copy `press/*` to it.
 5. Make the necessary changes to the templates(title, twitter handle…) and `letterpress.config`.
 6. Install [Pygments](http://pygments.org) if you want to embed code(using [GFM](http://github.github.com/github-flavored-markdown/)'s Syntax Highlighting) in your posts.
-	```bash
-	pip install Pygments
-	```
 
 # Usage
 ```bash
