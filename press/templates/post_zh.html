@@ -1,21 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:wb="http://open.weibo.com/wb">
 <head>
- <title>{{site_title}} - {{title}}</title>
-	
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="robots" content="index, follow">
-  <meta name="description" content="Ling Wang's blog." />
-  <meta name="keywords" content="Moke, Tweeet, Voodo, iOS, iPhone, iPad, app, OS X, Mac, Apple" />
-  <meta name="author" content="Ling Wang" />
-
-	<link rel="shortcut icon" href="/favicon.png" />
-  <link rel="home" type="application/rss+xml" href="/feed.xml" />
-
-	<link rel="stylesheet" href="/css/default.css" />
-	<link rel="stylesheet" href="/css/animations.css" />
+  <title>{{site_title}} - {{title}}</title>
+  {{common_head}}
 </head>
 <body>
   <header role="banner" id="post-head">
@@ -36,7 +23,7 @@
 	    <footer role="contentinfo" class="post-foot">
 	      <section class="post-foot-top">
 	 		    <p class="meta" id="tags">{{tags}}</p>
-	        <wb:share-button addition="number" type="button" ralateUid="1676354212" picture_search="false" title="{{title}}：{{excerpt}}"></wb:share-button>
+	        <wb:share-button addition="simple" type="button" ralateUid="1676354212" picture_search="false" title="{{title}}：{{excerpt}}"></wb:share-button>
 	      </section>
 	      <section class="bio">
 	        <a class="author-image" href="/"><img src="/img/me.jpg" alt="Me" /></a>
