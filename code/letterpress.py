@@ -24,6 +24,7 @@ import os.path
 import urllib.parse
 import shutil
 import itertools
+from functools import total_ordering
 import pyinotify
 import email.utils
 import html
@@ -65,6 +66,7 @@ def format(template, **kwargs):
 pygments_options = {'cssclass': 'code', 'classprefix': 'code-'}
 
 
+@total_ordering
 class Post(object):
 
     def __new__(cls, file_path, base_url, templates_dir, date_format, math_delimiter):
@@ -140,23 +142,26 @@ MathJax.Hub.Config({
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
 </head>''' % (math_delimiter, math_delimiter))
 
+    @property
+    def file_name(self):
+        return os.path.basename(self.file_path)
+
     def __str__(self):
         return '{title}({date})'.format(title=self.title, date=self.pretty_date)
 
     def __repr__(self):
         return str(self)
 
-    def __gt__(self, other):
-        return self.date > other.date
+    def __eq__(self, other):
+        return self.date == other.date and self.file_name == other.file_name
 
     def __lt__(self, other):
-        return self.date < other.date
-
-    def __ge__(self, other):
-        return self.date >= other.date
-
-    def __le__(self, other):
-        return self.date <= other.date
+        if self.date < other.date:
+            return True
+        elif self.date > other.date:
+            return False
+        else:
+            return self.file_name < other.file_name
 
     _code_span_re = re.compile(r"""
         <code               # start tag
@@ -213,6 +218,7 @@ MathJax.Hub.Config({
         return pygments.highlight(code, lexer, formatter)
 
 
+@total_ordering
 class Tag(object):
 
     def __init__(self, name, posts):
@@ -246,19 +252,14 @@ class Tag(object):
     def __repr__(self):
         return str(self)
 
-    def __gt__(self, other):
-        return self.name.lower() > other.name.lower()
+    def __eq__(self, other):
+        return self.name.lower() == other.name.lower()
 
     def __lt__(self, other):
         return self.name.lower() < other.name.lower()
 
-    def __ge__(self, other):
-        return self.name.lower() >= other.name.lower()
 
-    def __le__(self, other):
-        return self.name.lower() <= other.name.lower()
-
-
+@total_ordering
 class MonthlyArchive(object):
 
     def __init__(self, month, posts):
@@ -298,19 +299,14 @@ class MonthlyArchive(object):
     def __repr__(self):
         return str(self)
 
-    def __gt__(self, other):
-        return self.month > other.month
+    def __eq__(self, other):
+        return self.month == other.month
 
     def __lt__(self, other):
         return self.month < other.month
 
-    def __ge__(self, other):
-        return self.month >= other.month
 
-    def __le__(self, other):
-        return self.month <= other.month
-
-
+@total_ordering
 class YearlyArchive(object):
 
     def __init__(self, year, monthly_archives):
@@ -360,19 +356,14 @@ class YearlyArchive(object):
     def __repr__(self):
         return str(self)
 
-    def __gt__(self, other):
-        return self.year > other.year
+    def __eq__(self, other):
+        return self.year == other.year
 
     def __lt__(self, other):
         return self.year < other.year
 
-    def __ge__(self, other):
-        return self.year >= other.year
 
-    def __le__(self, other):
-        return self.year <= other.year
-
-
+@total_ordering
 class TimelineArchive(object):
 
     def __init__(self, index, posts):
@@ -419,18 +410,11 @@ class TimelineArchive(object):
     def __repr__(self):
         return str(self)
 
-    def __gt__(self, other):
-        return self.index > other.index
+    def __eq__(self, other):
+        return self.index == other.index
 
     def __lt__(self, other):
-
         return self.index < other.index
-
-    def __ge__(self, other):
-        return self.index >= other.index
-
-    def __le__(self, other):
-        return self.index <= other.index
 
 
 class Struct(object):
