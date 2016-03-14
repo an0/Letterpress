@@ -607,7 +607,8 @@ def main():
         del timeline_archives[:]
         sorted_posts = sorted(posts.values(), reverse=True)
         archive_list = [None]
-        for index, post_group in enumerate(grouper(5, sorted_posts)):
+        posts_per_page = int(config.get('posts_per_page', '10'))
+        for index, post_group in enumerate(grouper(posts_per_page, sorted_posts)):
             archive = TimelineArchive(index, post_group)
             timeline_archives.append(archive)
             archive_list.append(archive)
@@ -862,7 +863,9 @@ def main():
                                             if os.path.exists(dst):
                                                 shutil.rmtree(
                                                     dst, ignore_errors=True)
-                                if len(posts) % 5 == 0 and len(timeline_archives) > 1:
+                                posts_per_page = int(
+                                    config.get('posts_per_page', '10'))
+                                if len(posts) % posts_per_page == 0 and len(timeline_archives) > 1:
                                     # Last timeline archive is empty. Remove
                                     # it.
                                     last_timeline_archive = timeline_archives.pop()
