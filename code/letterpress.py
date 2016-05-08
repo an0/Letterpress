@@ -487,13 +487,6 @@ def main():
     published_dir = os.path.normpath(published_dir)
     templates_dir = os.path.join(published_dir, 'templates')
 
-    global common_head
-    global common_header
-    with codecs.open(os.path.join(templates_dir, "common_head.html"), 'r', 'utf-8') as f:
-        common_head = f.read()
-    with codecs.open(os.path.join(templates_dir, "common_header.html"), 'r', 'utf-8') as f:
-        common_header = f.read()
-
     logger.setLevel(options.log_level)
 
     # Logging.
@@ -753,6 +746,12 @@ def main():
 
     def build_site():
         logger.info('Build site')
+        global common_head
+        global common_header
+        with codecs.open(os.path.join(templates_dir, "common_head.html"), 'r', 'utf-8') as f:
+            common_head = f.read()
+        with codecs.open(os.path.join(templates_dir, "common_header.html"), 'r', 'utf-8') as f:
+            common_header = f.read()
         global posts
         posts.clear()
         for rel_path in os.listdir(published_dir):
