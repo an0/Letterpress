@@ -245,7 +245,6 @@ article .content video{
   display: block;
 /*  min-width: 50%;*/
   max-width: 100%;
-  height: auto;
   margin: auto;
   padding: 10px 0;
 }
@@ -334,69 +333,65 @@ article .content div.code {
 	border-radius: 4px;
 	border: 1px solid hsl(0,0%,84%);
 	box-shadow: 0 1px 1px hsla(0,0%,0%,.05),;
-	/*background-color: hsla(0,0%,0%,.02);*/
  }
-code  { color: #333 }
-code .code-c { color: rgba(0, 131, 18, 1) }
-code .code-err {}
-code .code-k { color: rgba(170, 13, 145, 1) }
-code .code-o { color: #000 }
-code .code-cm { color: rgba(0, 116, 0, 1) }
-code .code-cp { color: rgba(100, 56, 32, 1) }
-code .code-c1 { color: rgba(0, 116, 0, 1) }
-code .code-cs { color: rgba(0, 116, 0, 1) }
-code .code-gd { color: #A00000 }
+code { color: #333; }
+code .code-c { color: #999988; font-style: italic }
+code .code-err { color: #a61717; background-color: #e3d2d2 }
+code .code-k { font-weight: bold }
+code .code-o { font-weight: bold }
+code .code-cm { color: #999988; font-style: italic }
+code .code-cp { color: #999999; font-weight: bold }
+code .code-c1 { color: #999988; font-style: italic }
+code .code-cs { color: #999999; font-weight: bold; font-style: italic }
+code .code-gd { color: #000000; background-color: #fdd }
 code .code-ge { font-style: italic }
-code .code-gr { color: #F00 }
-code .code-gh { color: navy; font-weight: bold }
-code .code-gi { color: #00A000 }
-code .code-go { color: gray }
-code .code-gp { color: navy; font-weight: bold }
+code .code-gr { color: #a00 }
+code .code-gh { color: #999 }
+code .code-gi { color: #000000; background-color: #dfd }
+code .code-go { color: #888 }
+code .code-gp { color: #555 }
 code .code-gs { font-weight: bold }
-code .code-gu { color: purple; font-weight: bold }
-code .code-gt { color: #0040D0 }
-code .code-kc { color: rgba(170, 13, 145, 1) }
-code .code-kd { color: rgba(170, 13, 145, 1) }
-code .code-kp { color: rgba(170, 13, 145, 1) }
-code .code-kr { color: rgba(170, 13, 145, 1) }
-code .code-kt { color: rgba(170, 51, 145, 1) }
-code .code-m { color: rgba(28, 0, 207, 1) }
-code .code-s { color: rgba(196, 26, 22, 1) }
-code .code-n { color: rgba(92, 38, 153, 1) }
-code .code-na { color: rgba(131, 48, 30, 1) }
-code .code-nb { color: rgba(170, 13, 145, 1) }
-code .code-nc { color: rgba(63, 110, 116, 1) }
-code .code-no { color: rgba(38, 71, 75, 1) }
-code .code-nd { color: #A2F }
-code .code-ni { color: #999; font-weight: bold }
-code .code-ne { color: #D2413A; font-weight: bold }
-code .code-nf { color: rgba(0, 0, 0, 1) }
-code .code-nl { color: rgba(0, 0, 0, 1) }
-code .code-nn { color: #00F; font-weight: bold }
-code .code-nt { color: green; font-weight: bold }
-code .code-nv { color: #19177C }
-code .code-ow { color: #A2F; font-weight: bold }
+code .code-gu { color: #aaa }
+code .code-gt { color: #a00 }
+code .code-kc { font-weight: bold }
+code .code-kd { font-weight: bold }
+code .code-kp { font-weight: bold }
+code .code-kr { font-weight: bold }
+code .code-kt { color: #445588; font-weight: bold }
+code .code-m { color: #099 }
+code .code-s { color: #d14 }
+code .code-na { color: teal }
+code .code-nb { color: #0086B3 }
+code .code-nc { color: #445588; font-weight: bold }
+code .code-no { color: teal }
+code .code-ni { color: purple }
+code .code-ne { color: #990000; font-weight: bold }
+code .code-nf { color: #990000; font-weight: bold }
+code .code-nn { color: #555 }
+code .code-nt { color: navy }
+code .code-nv { color: teal }
+code .code-ow { font-weight: bold }
 code .code-w { color: #bbb }
-code .code-mf { color: rgba(28, 0, 207, 1) }
-code .code-mh { color: rgba(28, 0, 207, 1) }
-code .code-mi { color: rgba(28, 0, 207, 1) }
-code .code-mo { color: rgba(28, 0, 207, 1) }
-code .code-sb { color: rgba(196, 26, 22, 1) }
-code .code-sc { color: rgba(196, 26, 22, 1) }
-code .code-sd { color: rgba(196, 26, 22, 1) }
-code .code-s2 { color: rgba(196, 26, 22, 1) }
-code .code-se { color: rgba(196, 26, 22, 1) }
-code .code-sh { color: rgba(196, 26, 22, 1) }
-code .code-si { color: rgba(196, 26, 22, 1) }
-code .code-sx { color: rgba(196, 26, 22, 1) }
-code .code-sr { color: rgba(196, 26, 22, 1) }
-code .code-s1 { color: rgba(196, 26, 22, 1) }
-code .code-ss { color: rgba(196, 26, 22, 1) }
-code .code-bp { color: green }
-code .code-vc { color: rgba(63, 110, 116, 1) }
-code .code-vg { color: #19177C }
-code .code-vi { color: #19177C }
-code .code-il { color: rgba(28, 0, 207, 1) }
+code .code-mf { color: #099 }
+code .code-mh { color: #099 }
+code .code-mi { color: #099 }
+code .code-mo { color: #099 }
+code .code-sb { color: #d14 }
+code .code-sc { color: #d14 }
+code .code-sd { color: #d14 }
+code .code-s2 { color: #d14 }
+code .code-se { color: #d14 }
+code .code-sh { color: #d14 }
+code .code-si { color: #d14 }
+code .code-sx { color: #d14 }
+code .code-sr { color: #009926 }
+code .code-s1 { color: #d14 }
+code .code-ss { color: #990073 }
+code .code-bp { color: #999 }
+code .code-vc { color: teal }
+code .code-vg { color: teal }
+code .code-vi { color: teal }
+code .code-il { color: #099 }
 
 /* Responsiveness
  *************************************/
