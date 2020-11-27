@@ -125,7 +125,7 @@ p.meta a:hover{
   border-bottom: 1px solid var(--link-color-light);
 }
 code{
-  font-family: Menlo, Monaco, Consolas, Courier, Courier New, monospace;
+  font-family: "SF Mono", Menlo, Monaco, Consolas, Courier, "Courier New", monospace;
 }
 .container{
   overflow: hidden;
