@@ -328,7 +328,7 @@ article .content .intro{
 }
 article .content blockquote{
 	  padding-left: 10px;
-	  border-left: 2px solid var(--separator-color);
+	  border-left: 3px solid var(--separator-color);
 }
 
 /*
